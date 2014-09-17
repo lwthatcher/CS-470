@@ -35,6 +35,8 @@ class Agent(object):
         self.commands = []
         self.shoottimecounter = 0.0
         self.turntimecounter = 0.0
+        self.startangle = 0.0
+        self.angleset = False
         
 
     def tick(self, time_diff):
@@ -60,12 +62,20 @@ class Agent(object):
 			#self.turntimecounter = 0
 		# then turn 90d
         else:
-			for tank in mytanks:
-				command = Command(tank.index, 0, 0.9, False)
+			print "turning"
+			tank = mytanks[0]
+			if  not self.angleset:
+				print "setting new angle"
+				self.startangle = tank.angle
+				self.angleset = True
+			if self.normalize_angle(tank.angle) <= self.normalize_angle(self.startangle + (math.pi / 3)):
+				command = Command(tank.index, 1, math.pi, False)
 				self.commands.append(command)
-			#self.turntimecounter = 0	
-        
-        
+			else:
+				print "stop turning!!"
+				self.angleset = False
+				self.turntimecounter = 0	
+         
         
         # turn 60degrees every 3s
         #if self.turntimecounter > 3.0:
@@ -77,7 +87,7 @@ class Agent(object):
         
         # shoot every 2s
         if self.shoottimecounter > 2.0:
-			print self.shoottimecounter
+			print "firing!"
 			for tank in mytanks:
 				command = Command(tank.index, 0, 0, True)
 				self.commands.append(command)
