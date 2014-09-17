@@ -48,7 +48,13 @@ class Agent(object):
         self.commands = []
         
         self.timecounter += time_diff
-        if self.timecounter > 10.0:
+        
+        
+        
+        if self.timecounter > 2.0:
+			
+			#print "self.timecounter ", self.timecounter
+			
 			for tank in mytanks:
 				command = Command(tank.index, 0, 0, True)
 				self.commands.append(command)
@@ -112,7 +118,12 @@ def main():
     # Run the agent
     try:
         while True:
+            #timeA = time.time()
+            #print timeA
             time_diff = time.time() - prev_time
+            prev_time += time_diff
+            
+            #print prev_time
             agent.tick(time_diff)
     except KeyboardInterrupt:
         print "Exiting due to keyboard interrupt."
