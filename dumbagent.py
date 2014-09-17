@@ -33,7 +33,9 @@ class Agent(object):
         self.bzrc = bzrc
         self.constants = self.bzrc.get_constants()
         self.commands = []
-        self.timecounter = 0.0
+        self.shoottimecounter = 0.0
+        self.turntimecounter = 0.0
+        
 
     def tick(self, time_diff):
         """Some time has passed; decide what to do next."""
@@ -47,18 +49,39 @@ class Agent(object):
 
         self.commands = []
         
-        self.timecounter += time_diff
+        self.shoottimecounter += time_diff
+        self.turntimecounter += time_diff
+        
+        # go straight for 5s
+        if self.turntimecounter < 5.0:
+			for tank in mytanks:
+				command = Command(tank.index, 1.0, 0, False)
+				self.commands.append(command)
+			#self.turntimecounter = 0
+		# then turn 90d
+        else:
+			for tank in mytanks:
+				command = Command(tank.index, 0, 0.9, False)
+				self.commands.append(command)
+			#self.turntimecounter = 0	
         
         
         
-        if self.timecounter > 2.0:
+        # turn 60degrees every 3s
+        #if self.turntimecounter > 3.0:
 			
-			#print "self.timecounter ", self.timecounter
-			
+			#for tank in mytanks:
+				#command = Command(tank.index, 0, 0.9, False)
+				#self.commands.append(command)
+			#self.turntimecounter = 0
+        
+        # shoot every 2s
+        if self.shoottimecounter > 2.0:
+			print self.shoottimecounter
 			for tank in mytanks:
 				command = Command(tank.index, 0, 0, True)
 				self.commands.append(command)
-			self.timecounter = 0
+			self.shoottimecounter = 0
 
         results = self.bzrc.do_commands(self.commands)
 
