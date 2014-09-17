@@ -35,8 +35,9 @@ class Agent(object):
         self.commands = []
         self.shoottimecounter = 0.0
         self.turntimecounter = 0.0
-        self.startangle = []
-        self.angleset = []
+        self.startangle = 0.0
+        self.angleset = False
+        self.turnangle = math.pi / 3
 			
         
 
@@ -55,28 +56,40 @@ class Agent(object):
         self.shoottimecounter += time_diff
         self.turntimecounter += time_diff
         
+        
+        
         if self.turntimecounter >= 8.0:
-			for tank in mytanks:
-				#print "turning"
-				if  not self.angleset[tank.index]:
-					print "setting new angle"
-					self.startangle[tank.index] = tank.angle
-					self.angleset[tank.index] = True
-					self.turntimecounter = 0
+			#print "turning"
+			if  not self.angleset:
+				print "setting new angle"
+				self.startangle = mytanks[0].angle
+				print "startangle: ", self.startangle
+				self.angleset = True
+				self.turntimecounter = 0
 				
 		
-        for tank in mytanks:
-		    if self.angleset[tank.index] == True:
-				if self.normalize_angle(tank.angle) <= self.normalize_angle(self.startangle[tank.index] + (math.pi / 3)):
-					command = Command(tank.index, 1, math.pi, False)
-					self.commands.append(command)
-				else:
-					print "stop turning!!"
-					self.angleset[tank.index] = False
-					command = Command(tank.index, 1, 0, False)
-		    else:
-				command = Command(tank.index, 1.0, 0, False)
+
+        if self.angleset == True:
+			
+			if self.startangle <= 0:
+				
+			elif self.startangle > 0 && (self.startangle + self.turnangle) < math.pi:
+				if self.normalize_angle(mytanks[0].angle) <= self.normalize_angle(self.startangle + self.turnangle):
+				command = Command(mytanks[0].index, 0, math.pi, False)
 				self.commands.append(command)
+			elif self.startangle > 0 && (self.startangle + self.turnangle) > math.pi:
+				
+			if self.normalize_angle(mytanks[0].angle) >= self.normalize_angle(self.startangle + (math.pi / 3)):
+				print "normalize_angle"
+				command = Command(mytanks[0].index, 0, math.pi, False)
+				self.commands.append(command)
+			else:
+				print "stop turning!!"
+				self.angleset = False
+				command = Command(mytanks[0].index, 1.0, 0, False)
+        else:
+			command = Command(mytanks[0].index, 1.0, 0, False)
+			self.commands.append(command)
 			
 			#self.turntimecounter = 0
          
@@ -85,9 +98,8 @@ class Agent(object):
         # shoot every 2s
         if self.shoottimecounter > 2.0:
 			print "firing!"
-			for tank in mytanks:
-				command = Command(tank.index, 0, 0, True)
-				self.commands.append(command)
+			command = Command(mytanks[0].index, 0, 0, True)
+			self.commands.append(command)
 			self.shoottimecounter = 0
 
         results = self.bzrc.do_commands(self.commands)
@@ -151,13 +163,6 @@ def main():
 
     # Run the agent
     try:
-		
-		# initialize all the tanks to 'not turning'
-        mytanks = bzrc.get_mytanks()
-        for tank in mytanks:
-			print tank.index
-			agent.angleset.append(False)
-			agent.startangle.append(0)
 		
         while True:
             time_diff = time.time() - prev_time
