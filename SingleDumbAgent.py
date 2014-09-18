@@ -71,13 +71,33 @@ class Agent(object):
 
         if self.angleset == True:
 			
-			if self.startangle <= 0:
+			if self.startangle >= 0:
+				if self.normalize_angle(self.startangle + self.turnangle) > 0:
+					if self.normalize_angle(mytanks[0].angle) <= self.normalize_angle(self.startangle + self.turnangle):
+						command = Command(mytanks[0].index, 0, math.pi, False)
+						self.commands.append(command)
+					else:
+						print "stop turning!!"
+						self.angleset = False
+						command = Command(mytanks[0].index, 1.0, 0, False)
+				elif self.normalize_angle(self.startangle + self.turnangle) < 0:
+					# if self.normalize_angle(mytanks[0].angle) < self.normalize_angle(self.startangle + math.turnangle)):
+					if self.normalize_angle(mytanks[0].angle) > (math.turnangle - (math.pi - self.startangle)) - math.pi:
+						print "stop turning!!"
+						self.angleset = False
+						command = Command(mytanks[0].index, 1.0, 0, False)
+					else
+						command = Command(mytanks[0].index, 0, math.pi, False)
+						self.commands.append(command)
+					
 				
 			elif self.startangle > 0 && (self.startangle + self.turnangle) < math.pi:
-				if self.normalize_angle(mytanks[0].angle) <= self.normalize_angle(self.startangle + self.turnangle):
-				command = Command(mytanks[0].index, 0, math.pi, False)
-				self.commands.append(command)
+				
 			elif self.startangle > 0 && (self.startangle + self.turnangle) > math.pi:
+				
+				
+				
+				
 				
 			if self.normalize_angle(mytanks[0].angle) >= self.normalize_angle(self.startangle + (math.pi / 3)):
 				print "normalize_angle"
