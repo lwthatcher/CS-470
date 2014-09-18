@@ -58,55 +58,95 @@ class Agent(object):
         
         
         
-        if self.turntimecounter >= 8.0:
+        if self.turntimecounter >= 10.0:
 			#print "turning"
 			if  not self.angleset:
-				print "setting new angle"
+				#print "setting new angle"
 				self.startangle = mytanks[0].angle
-				print "startangle: ", self.startangle
+				#print "startangle: ", self.startangle
 				self.angleset = True
 				self.turntimecounter = 0
 				
 		
 
         if self.angleset == True:
-			
-			if self.startangle >= 0:
-				if self.normalize_angle(self.startangle + self.turnangle) > 0:
-					if self.normalize_angle(mytanks[0].angle) <= self.normalize_angle(self.startangle + self.turnangle):
-						command = Command(mytanks[0].index, 0, math.pi, False)
-						self.commands.append(command)
-					else:
-						print "stop turning!!"
-						self.angleset = False
-						command = Command(mytanks[0].index, 1.0, 0, False)
-				elif self.normalize_angle(self.startangle + self.turnangle) < 0:
-					# if self.normalize_angle(mytanks[0].angle) < self.normalize_angle(self.startangle + math.turnangle)):
-					if self.normalize_angle(mytanks[0].angle) > (math.turnangle - (math.pi - self.startangle)) - math.pi:
-						print "stop turning!!"
-						self.angleset = False
-						command = Command(mytanks[0].index, 1.0, 0, False)
-					else
-						command = Command(mytanks[0].index, 0, math.pi, False)
-						self.commands.append(command)
-					
+			endangle = self.startangle + self.turnangle
+			if self.turnangle > 0: # turning left
+				if self.startangle >= 0:
+					if self.normalize_angle(endangle) > 0: # the sign stayes the same
+						if self.normalize_angle(mytanks[0].angle) <= self.normalize_angle(endangle):
+							command = Command(mytanks[0].index, 0, math.pi, False)
+							self.commands.append(command)
+						else:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+					else: # the sign changes
+						if self.normalize_angle(mytanks[0].angle) > self.normalize_angle(endangle) and self.normalize_angle(mytanks[0].angle) < 0:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+						else:
+							command = Command(mytanks[0].index, 0, math.pi, False)
+							self.commands.append(command)
+				else: # self.startangle < 0
+					if self.normalize_angle(endangle) < 0: # the sign stays the same
+						if self.normalize_angle(mytanks[0].angle) <= self.normalize_angle(endangle):
+							command = Command(mytanks[0].index, 0, math.pi, False)
+							self.commands.append(command)
+						else:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+					else: # the sign changes
+						if self.normalize_angle(mytanks[0].angle) > self.normalize_angle(endangle) and self.normalize_angle(mytanks[0].angle) > 0:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+						else:
+							command = Command(mytanks[0].index, 0, math.pi, False)
+							self.commands.append(command)
+			else: #turning right
+				if self.startangle >= 0:
+					if self.normalize_angle(endangle) > 0: # the sign stayes the same
+						if self.normalize_angle(mytanks[0].angle) >= self.normalize_angle(endangle):
+							command = Command(mytanks[0].index, 0, -math.pi, False)
+							self.commands.append(command)
+						else:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+					else: # the sign changes
+						if self.normalize_angle(mytanks[0].angle) < self.normalize_angle(endangle) and self.normalize_angle(mytanks[0].angle) < 0:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+						else:
+							command = Command(mytanks[0].index, 0, -math.pi, False)
+							self.commands.append(command)
+				else: # self.startangle < 0
+					if self.normalize_angle(endangle) < 0: # the sign stays the same
+						if self.normalize_angle(mytanks[0].angle) >= self.normalize_angle(endangle):
+							command = Command(mytanks[0].index, 0, -math.pi, False)
+							self.commands.append(command)
+						else:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+					else: # the sign changes
+						if self.normalize_angle(mytanks[0].angle) < self.normalize_angle(endangle) and self.normalize_angle(mytanks[0].angle) > 0:
+							self.angleset = False
+							command = Command(mytanks[0].index, 1.0, 0, False)
+						else:
+							command = Command(mytanks[0].index, 0, -math.pi, False)
+							self.commands.append(command)
+						
 				
-			elif self.startangle > 0 && (self.startangle + self.turnangle) < math.pi:
-				
-			elif self.startangle > 0 && (self.startangle + self.turnangle) > math.pi:
 				
 				
 				
 				
-				
-			if self.normalize_angle(mytanks[0].angle) >= self.normalize_angle(self.startangle + (math.pi / 3)):
-				print "normalize_angle"
-				command = Command(mytanks[0].index, 0, math.pi, False)
-				self.commands.append(command)
-			else:
-				print "stop turning!!"
-				self.angleset = False
-				command = Command(mytanks[0].index, 1.0, 0, False)
+			#if self.normalize_angle(mytanks[0].angle) >= self.normalize_angle(self.startangle + (math.pi / 3)):
+				#print "normalize_angle"
+				#command = Command(mytanks[0].index, 0, math.pi, False)
+				#self.commands.append(command)
+			#else:
+				#print "stop turning!!"
+				#self.angleset = False
+				#command = Command(mytanks[0].index, 1.0, 0, False)
         else:
 			command = Command(mytanks[0].index, 1.0, 0, False)
 			self.commands.append(command)
