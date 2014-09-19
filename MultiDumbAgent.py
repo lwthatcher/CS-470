@@ -36,6 +36,10 @@ class Agent(object):
 		self.shoottimecounter = 0.0
 		self.turntimecounter = 0.0
 		self.turnangle = math.pi / 3
+		self.startangles = [0.0, 0.0, 0.0]
+		self.angleset = [False, False, False]
+		
+		self.agents = [0, 1, 2]
 			
 		
 
@@ -57,30 +61,31 @@ class Agent(object):
 		
 		if self.turntimecounter >= 10.0:
 			#print "turning"
-			for tank in self.mytanks:
-				if  not tank.angleset:
+			for i in self.agents:
+				tank = self.mytanks[i]
+				if  not self.angleset[i]:
 					#print "setting new angle"
-					tank.startangle = tank.angle
-					#print "startangle: ", tank.startangle
-					tank.angleset = True
+					self.startangles[i] = tank.angle
+					#print "startangle: ", self.startangles[i]
+					self.angleset[i] = True
 			self.turntimecounter = 0
 		
 				
 		
-		#for tank in self.mytanks:
-		tank = self.mytanks[1]
-		if tank.angleset == True:
-			#print "handling turning command"
-			self.handle_turning(tank)
-		else:
-			command = Command(tank.index, 1.0, 0, False)
-			self.commands.append(command)
-		# shoot every 2s
-		if self.shoottimecounter > 2.0:
-			print "firing!"
-			command = Command(tank.index, 0, 0, True)
-			self.commands.append(command)
-			self.shoottimecounter = 0
+		for i in self.agents:
+			tank = self.mytanks[i]
+			if self.angleset[i] == True:
+				#print "handling turning command"
+				self.handle_turning(tank, i)
+			else:
+				command = Command(tank.index, 1.0, 0, False)
+				self.commands.append(command)
+			# shoot every 2s
+			if self.shoottimecounter > 2.0:
+				print "firing!"
+				command = Command(tank.index, 0, 0, True)
+				self.commands.append(command)
+				self.shoottimecounter = 0
 	
 		results = self.bzrc.do_commands(self.commands)
 	
@@ -88,55 +93,52 @@ class Agent(object):
 		command = Command(tankindex, 1, math.pi, False)
 		self.commands.append(command)
 		
-	def handle_turning(self, tank):
-		endangle = tank.startangle + self.turnangle
+	def handle_turning(self, tank, i):
+		endangle = self.startangles[i] + self.turnangle
 		if self.turnangle > 0: # turning left
-			print "turning left"
-			print "start angle: ", tank.startangle
-			print "current angle: ", tank.angle
-			if tank.startangle >= 0:
+			if self.startangles[i] >= 0:
 				if self.normalize_angle(endangle) > 0: # the sign stayes the same
 					if self.normalize_angle(tank.angle) <= self.normalize_angle(endangle):
 						command = Command(tank.index, 0, math.pi, False)
 						self.commands.append(command)
 					else:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 				else: # the sign changes
 					if self.normalize_angle(tank.angle) > self.normalize_angle(endangle) and self.normalize_angle(tank.angle) < 0:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 					else:
 						command = Command(tank.index, 0, math.pi, False)
 						self.commands.append(command)
-			else: # tank.startangle < 0
+			else: # self.startangles[i] < 0
 				if self.normalize_angle(endangle) < 0: # the sign stays the same
 					if self.normalize_angle(tank.angle) <= self.normalize_angle(endangle):
 						command = Command(tank.index, 0, math.pi, False)
 						self.commands.append(command)
 					else:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 				else: # the sign changes
 					if self.normalize_angle(tank.angle) > self.normalize_angle(endangle) and self.normalize_angle(tank.angle) > 0:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 					else:
 						command = Command(tank.index, 0, math.pi, False)
 						self.commands.append(command)
 		"""else: #turning right
 			print "turning wright"
-			if tank.startangle >= 0:
+			if self.startangles[i] >= 0:
 				if self.normalize_angle(endangle) > 0: # the sign stayes the same
 					if self.normalize_angle(tank.angle) >= self.normalize_angle(endangle):
 						command = Command(tank.index, 0, -math.pi, False)
 						self.commands.append(command)
 					else:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 				else: # the sign changes
 					if self.normalize_angle(tank.angle) < self.normalize_angle(endangle) and self.normalize_angle(tank.angle) < 0:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 					else:
 						command = Command(tank.index, 0, -math.pi, False)
@@ -147,11 +149,11 @@ class Agent(object):
 						command = Command(tank.index, 0, -math.pi, False)
 						self.commands.append(command)
 					else:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 				else: # the sign changes
 					if self.normalize_angle(tank.angle) < self.normalize_angle(endangle) and self.normalize_angle(tank.angle) > 0:
-						tank.angleset = False
+						self.angleset[i] = False
 						command = Command(tank.index, 1.0, 0, False)
 					else:
 						command = Command(tank.index, 0, -math.pi, False)
