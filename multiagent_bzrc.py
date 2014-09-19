@@ -243,10 +243,6 @@ class BZRC:
                 tank.vy = float(line[11])
                 tank.angvel = float(line[12])
                 
-                # custom added variables
-                tank.startangle = 0.0
-                tank.angleset = False
-                
                 tanks.append(tank)
             elif line[0] == 'end':
                 break
