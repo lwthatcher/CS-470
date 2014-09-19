@@ -42,7 +42,7 @@ class Agent(object):
         self.writeonce = True
         
         # Output file:
-        self.FILENAME = 'fields.gpi'
+        self.FILENAME = 'testfields.gpi'
         # Size of the world (one of the "constants" in bzflag):
         self.WORLDSIZE = 800
         # How many samples to take along each dimension:
@@ -189,9 +189,10 @@ class Agent(object):
     	minimum = -self.WORLDSIZE / 2
     	maximum = self.WORLDSIZE / 2
     	print >>outfile, self.gnuplot_header(minimum, maximum)
-    	print >>outfile, self.draw_obstacles(self.OBSTACLES)
+    	print >>outfile, self.draw_obstacles(self.bzrc.get_obstacles())
     	field_function = self.generate_field_function(150)
     	print >>outfile, self.plot_field(field_function)
+    	outfile.close()
 
     def attack_enemies(self, tank):
         """Find the closest enemy and chase it, shooting as you go."""
@@ -233,15 +234,17 @@ class Agent(object):
     def generate_field_function(self, scale):
     	def function(x, y):
     		'''User-defined field function.'''
-    		sqnorm = (x**2 + y**2)
+    		sqnorm = (x + y**2)
     		if sqnorm == 0.0:
     			return 0, 0
     		else:
     			return x*scale/sqnorm, y*scale/sqnorm
     	return function
     
-    OBSTACLES = [((0, 0), (-150, 0), (-150, -50), (0, -50)),
-    				((200, 100), (200, 330), (300, 330), (300, 100))]
+    #OBSTACLES = [((0, 0), (-150, 0), (-150, -50), (0, -50)),
+    #				((200, 100), (200, 330), (300, 330), (300, 100))]
+    
+    #OBSTACLES = self.bzrc.get_obstacles()
     
     
     ########################################################################
