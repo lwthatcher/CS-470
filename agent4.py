@@ -62,8 +62,8 @@ class Agent(object):
 				self.goto_flags(tank)
 			else:
 				base_x, base_y = self.get_base_center(self.get_my_base())
-				tank.add_to_fields(base_x, base_y)
-				self.move_to_position(tank)
+				#tank.add_to_fields(base_x, base_y)
+				self.move_to_position(tank, base_x, base_y)
 
 		results = self.bzrc.do_commands(self.commands)
 
@@ -107,7 +107,7 @@ class Agent(object):
 		my_x = tank.x
 		my_y = tank.y
 		
-		if between_endpoints(my_x, my_y, p1, p2): # need to consider if it's between the start and end of the line
+		if self.between_endpoints(my_x, my_y, p1, p2): # need to consider if it's between the start and end of the line
 			x1, y1 = p1
 			x2, y2 = p2
 			
@@ -233,9 +233,9 @@ class Agent(object):
 		p1 = obstacle[0]
 		for p2 in obstacle[1:]:
 			repel_x, repel_y = self.get_repel_field(tank, p1, p2)
-				if repel_x => max_x or repel_y => max_y:
-					max_x = repel_x
-					max_y = repel_y
+			if repel_x >= max_x or repel_y >= max_y:
+				max_x = repel_x
+				max_y = repel_y
 			p1 = p2
 		return max_x, max_y
 	
