@@ -79,18 +79,22 @@ class Agent(object):
 		return center_x, center_y
 
 	def goto_flags(self, tank):
-		best_flag = None
-		best_dist = 2 * float(self.constants['worldsize'])
-		for flag in self.flags:
-			dist = math.sqrt((flag.x - tank.x)**2 + (flag.y - tank.y)**2)
-			if dist < best_dist:
-				best_dist = dist
-				best_flag = flag
+		best_flag = self.get_best_flag(tank.x, tank.y)
 		if best_flag is None:
 			command = Command(tank.index, 0, 0, False)
 			self.commands.append(command)
 		else:
 			self.move_to_position(tank, best_flag.x, best_flag.y)
+
+	def get_best_flag(self, x, y):
+		best_flag = None
+		best_dist = 2 * float(self.constants['worldsize'])
+		for flag in self.flags:
+			dist = math.sqrt((flag.x - x)**2 + (flag.y - y)**2)
+			if dist < best_dist:
+				best_dist = dist
+				best_flag = flag
+		return best_flag
 
 	def attack_enemies(self, tank):
 		"""Find the closest enemy and chase it, shooting as you go."""
@@ -197,9 +201,11 @@ class Agent(object):
 			delta_x += repel_x
 			delta_y += repel_y				
 			p1 = p2
+		
 		if delta_x != 0 or delta_y != 0:
 			print "get_obstacle_force delta_x: ", delta_x
 			print "get_obstacle_force delta_y: ", delta_y
+		
 		return delta_x, delta_y
 	
 	def get_repel_field(self, x, y, p1, p2):
@@ -207,7 +213,6 @@ class Agent(object):
 		my_y = y
 		
 		if self.between_endpoints(my_x, my_y, p1, p2): # need to consider if it's between the start and end of the line
-			#print "between endpoints"
 			x1, y1 = p1
 			x2, y2 = p2
 			
@@ -223,7 +228,6 @@ class Agent(object):
 			dist = abs(a * my_x + b * my_y + c) / sqnorm
 			
 			if dist < self.OBS_TOLERANCE:
-				#print "dist < self.OBS_TOLERANCE"
 				# normal vector purpendicular to the obstacle
 				n_hat = [a / sqnorm, b / sqnorm] 
 				
@@ -237,14 +241,7 @@ class Agent(object):
 				delta_x = -self.BETA * (self.OBS_TOLERANCE - dist) * math.cos(theta) # math.cos returns in radians
 				delta_y = -self.BETA * (self.OBS_TOLERANCE - dist) * math.sin(theta)
 				
-				#print "delta_x: ", delta_x
-				#print "delta_y: ", delta_y
-				
 				return delta_x, delta_y
-				
-				#relative_angle = self.normalize_angle(target_angle - tank.angle)
-				#command = Command(tank.index, 1, 2 * relative_angle, True)
-				#self.commands.append(command)
 			else:
 				return 0, 0
 		else:
@@ -311,33 +308,23 @@ class GnuPlot():
 	def generate_field_function(self, scale):
 		
 		def function(x, y):
-			target = self.get_best_flag(x, y)
-			
-			#target_x, target_y = target
+			target = self.agent.get_best_flag(x, y)
 			
 			goal_dist = math.sqrt((target.x - x)**2 + (target.y - y)**2)
 			target_angle = math.atan2(target.y - y, target.x - x)
-			
-			
-			'''if goal_dist < self.S:					  
-				delta_xG = self.ALPHA * (self.S - goal_dist) * math.cos(target_angle) # r = 0
-				delta_yG = self.ALPHA * (self.S - goal_dist) * math.sin(target_angle) # r = 0
-			else:
-				delta_xG = 0
-				delta_yG = 0'''
-		
+
 			delta_xG = self.agent.ALPHA * goal_dist * math.cos(target_angle) # r = 0
 			delta_yG = self.agent.ALPHA * goal_dist * math.sin(target_angle) # r = 0
 			
-			'''if delta_xG > 0 or delta_yG > 0:
-				print "delta_xG: ", delta_xG
-				print "delta_yG: ", delta_yG'''
+			sqnorm = math.sqrt(delta_xG**2 + delta_yG**2)
 			
-			# The turn angle should change depending on where the obstacles are.
-			
-			# Loop through the obstacles
-			# For each obstacle that is a certain distance away, calculate the force it has on the tank
-			
+			if sqnorm == 0:
+				delta_xG = 0
+				delta_yG = 0
+			else:
+				delta_xG = delta_xG / sqnorm
+				delta_yG = delta_yG / sqnorm
+
 			delta_xO = 0
 			delta_yO = 0
 			
@@ -346,8 +333,17 @@ class GnuPlot():
 				delta_xO += repel_xO
 				delta_yO += repel_yO
 			
+			sqnorm = math.sqrt(delta_xO**2 + delta_yO**2)
+			
+			if sqnorm == 0:
+				delta_xO = 0
+				delta_yO = 0
+			else:
+				delta_xO = delta_xO / sqnorm
+				delta_yO = delta_yO / sqnorm
+
 			delta_x = delta_xG + delta_xO
-			delta_y = delta_yG + delta_xO
+			delta_y = delta_yG + delta_yO
 			
 			'''User-defined field function.'''
 			sqnorm = (x**2 + y**2)
@@ -357,16 +353,6 @@ class GnuPlot():
 				#return delta_x*scale/sqnorm, delta_y*scale/sqnorm
 				return delta_x*scale, delta_y*scale
 		return function
-	
-	def get_best_flag(self, x, y):
-		best_flag = None
-		best_dist = 2 * float(self.constants['worldsize'])
-		for flag in self.flags:
-			dist = math.sqrt((flag.x - x)**2 + (flag.y - y)**2)
-			if dist < best_dist:
-				best_dist = dist
-				best_flag = flag
-		return best_flag
 	
 	def gpi_point(self, x, y, vec_x, vec_y):
 		'''Create the centered gpi data point (4-tuple) for a position and
