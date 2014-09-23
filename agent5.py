@@ -34,11 +34,12 @@ class Agent(object):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
-		self.ALPHA = 0.3
-		self.BETA = 0.5
-		self.OBS_TOLERANCE = 10.0
+		self.ALPHA = 0.01
+		self.BETA = 0.3
+		self.OBS_TOLERANCE = 30.0
 		self.S = 50
 		self.wroteonce = False
+		self.goalradius = 30
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -113,24 +114,21 @@ class Agent(object):
 		else:
 			self.move_to_position(tank, best_enemy.x, best_enemy.y)
 
-	def move_to_position(self, tank, target_x, target_y):
-		"""Set command to move to given coordinates."""
-		
-		goal_dist = math.sqrt((target_x - tank.x)**2 + (target_y - tank.y)**2)
-		target_angle = math.atan2(target_y - tank.y, target_x - tank.x)
-		
-		
-		'''if goal_dist < self.S:					  
-			delta_xG = self.ALPHA * (self.S - goal_dist) * math.cos(target_angle) # r = 0
-			delta_yG = self.ALPHA * (self.S - goal_dist) * math.sin(target_angle) # r = 0
-		else:
-			delta_xG = 0
-			delta_yG = 0'''
+	def calculate_objective_delta(self, my_x, my_y, target_x, target_y):
+		goal_dist = math.sqrt((target_x - my_x)**2 + (target_y - my_y)**2)
+		target_angle = math.atan2(target_y - my_y, target_x - my_x)
 		
 		delta_xG = self.ALPHA * goal_dist * math.cos(target_angle) # r = 0
 		delta_yG = self.ALPHA * goal_dist * math.sin(target_angle) # r = 0
 		
 		sqnorm = math.sqrt(delta_xG**2 + delta_yG**2)
+		
+		#set magnitude
+		magnitude = 0
+		if goal_dist > self.goalradius:
+			magnitude = 1
+		else:
+			magnitude = sqnorm
 		
 		if sqnorm == 0:
 			delta_xG = 0
@@ -138,26 +136,20 @@ class Agent(object):
 		else:
 			delta_xG = delta_xG / sqnorm
 			delta_yG = delta_yG / sqnorm
-		
-		if delta_xG != 0 or delta_yG != 0:
-			print "delta_xG: ", delta_xG
-			print "delta_yG: ", delta_yG
-		
-		# The turn angle should change depending on where the obstacles are.
-		
-		# Loop through the obstacles
-		# For each obstacle that is a certain distance away, calculate the force it has on the tank
-		
+			
+		return delta_xG, delta_yG, magnitude
+
+	def calculate_obstacles_delta(self, x, y):
 		delta_xO = 0
 		delta_yO = 0
 		
 		for obs in self.obstacles:
-			repel_xO, repel_yO = self.get_obstacle_force(obs, tank.x, tank.y)
+			repel_xO, repel_yO = self.get_obstacle_force(obs, x, y)
 			delta_xO += repel_xO
 			delta_yO += repel_yO
 		
 		sqnorm = math.sqrt(delta_xO**2 + delta_yO**2)
-		
+			
 		if sqnorm == 0:
 			delta_xO = 0
 			delta_yO = 0
@@ -165,28 +157,32 @@ class Agent(object):
 			delta_xO = delta_xO / sqnorm
 			delta_yO = delta_yO / sqnorm
 		
-		if delta_xG != 0 or delta_yG != 0:
+		'''if delta_xG != 0 or delta_yG != 0:
 			print "delta_xO: ", delta_xO
-			print "delta_yO: ", delta_yO
+			print "delta_yO: ", delta_yO'''
 			
+		return delta_xO, delta_yO
+
+	def move_to_position(self, tank, target_x, target_y):
+		"""Set command to move to given coordinates."""
 		
+		#get deltas
+		delta_xG, delta_yG, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_x, target_y)
+		delta_xO, delta_yO = self.calculate_obstacles_delta(tank.x, tank.y)
+		
+		#combine
 		delta_x = delta_xG + delta_xO
 		delta_y = delta_yG + delta_yO
 		
-		if delta_x != 0 or delta_y != 0:
-			print "delta_x: ", delta_x
-			print "delta_y: ", delta_y
-			print "tank.x: ", tank.x
-			print "tank.y: ", tank.y
-			print
-		
-		
+		#calculate angle
 		turn_angle = math.atan2(delta_y, delta_x)
-		
 		relative_angle = self.normalize_angle(turn_angle - tank.angle)
 		
+		#put lower bound on speed: no slower than 40%
+		if magnitude < 0.4:
+			magnitude = 0.4
 		
-		command = Command(tank.index, 1, 2 * relative_angle, True)
+		command = Command(tank.index, magnitude, 2 * relative_angle, True)
 		self.commands.append(command)
 	
 	def get_obstacle_force(self, obstacle, x, y):
@@ -201,11 +197,7 @@ class Agent(object):
 			delta_x += repel_x
 			delta_y += repel_y				
 			p1 = p2
-		
-		if delta_x != 0 or delta_y != 0:
-			print "get_obstacle_force delta_x: ", delta_x
-			print "get_obstacle_force delta_y: ", delta_y
-		
+				
 		return delta_x, delta_y
 	
 	def get_repel_field(self, x, y, p1, p2):
@@ -238,7 +230,7 @@ class Agent(object):
 				# angle between the tank and the obstacle
 				theta = math.atan2(obs_point[1] - my_y, obs_point[0] - my_x)
 				
-				delta_x = -self.BETA * (self.OBS_TOLERANCE - dist) * math.cos(theta) # math.cos returns in radians
+				delta_x = self.BETA * (self.OBS_TOLERANCE - dist) * math.cos(theta) # math.cos returns in radians
 				delta_y = -self.BETA * (self.OBS_TOLERANCE - dist) * math.sin(theta)
 				
 				return delta_x, delta_y
@@ -288,7 +280,7 @@ class GnuPlot():
 		
 		self.FILENAME = 'plot.gpi'
 		self.WORLDSIZE = 800
-		self.SAMPLES = 25
+		self.SAMPLES = 50
 		self.VEC_LEN = 0.75 * self.WORLDSIZE / self.SAMPLES
 		
 		self.flags = flags
@@ -310,48 +302,22 @@ class GnuPlot():
 		def function(x, y):
 			target = self.agent.get_best_flag(x, y)
 			
-			goal_dist = math.sqrt((target.x - x)**2 + (target.y - y)**2)
-			target_angle = math.atan2(target.y - y, target.x - x)
-
-			delta_xG = self.agent.ALPHA * goal_dist * math.cos(target_angle) # r = 0
-			delta_yG = self.agent.ALPHA * goal_dist * math.sin(target_angle) # r = 0
+			#get deltas
+			delta_xG, delta_yG = [0, 0]
+			magnitude = 1
+			##delta_xG, delta_yG, magnitude = self.agent.calculate_objective_delta(x, y, target.x, target.y)
+			delta_xO, delta_yO = self.agent.calculate_obstacles_delta(x, y)
 			
-			sqnorm = math.sqrt(delta_xG**2 + delta_yG**2)
-			
-			if sqnorm == 0:
-				delta_xG = 0
-				delta_yG = 0
-			else:
-				delta_xG = delta_xG / sqnorm
-				delta_yG = delta_yG / sqnorm
-
-			delta_xO = 0
-			delta_yO = 0
-			
-			for obs in self.obstacles:
-				repel_xO, repel_yO = self.agent.get_obstacle_force(obs, x, y)
-				delta_xO += repel_xO
-				delta_yO += repel_yO
-			
-			sqnorm = math.sqrt(delta_xO**2 + delta_yO**2)
-			
-			if sqnorm == 0:
-				delta_xO = 0
-				delta_yO = 0
-			else:
-				delta_xO = delta_xO / sqnorm
-				delta_yO = delta_yO / sqnorm
-
+			#combine
 			delta_x = delta_xG + delta_xO
 			delta_y = delta_yG + delta_yO
 			
-			'''User-defined field function.'''
-			sqnorm = (x**2 + y**2)
-			if sqnorm == 0.0:
-				return 0, 0
-			else:
-				#return delta_x*scale/sqnorm, delta_y*scale/sqnorm
-				return delta_x*scale, delta_y*scale
+			#put lower bound on speed limit
+			if magnitude < 0.4:
+				magnitude = 0.4
+			
+			return delta_x*scale*magnitude, delta_y*scale*magnitude
+			
 		return function
 	
 	def gpi_point(self, x, y, vec_x, vec_y):
