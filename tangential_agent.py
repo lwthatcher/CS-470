@@ -36,7 +36,7 @@ class Agent(object):
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
 		self.ALPHA = 0.01
-		self.BETA = 0.1
+		self.BETA = 0.3
 		self.OBS_TOLERANCE = 35.0
 		self.S = 50
 		self.wroteonce = False
@@ -44,7 +44,9 @@ class Agent(object):
 		
 		self.tankradius = 5
 		self.avoidradius = 50
-		self.avoidBETA = 0.01
+		self.avoidBETA = 0.1
+		
+		self.aimtolerance = math.pi/20
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -196,6 +198,14 @@ class Agent(object):
 		dx = random.uniform(-.01, .01)
 		dy = random.uniform(-.01, .01)
 		return dx, dy
+		
+	def should_fire(self, tank):
+		for enemy in self.enemies:
+			target_angle = math.atan2(enemy.y - tank.y, enemy.x - tank.x)
+			if abs(tank.angle - target_angle) < self.aimtolerance:
+				return True
+				
+		return False
 
 	def move_to_position(self, tank, target_x, target_y):
 		"""Set command to move to given coordinates."""
@@ -215,10 +225,12 @@ class Agent(object):
 		relative_angle = self.normalize_angle(turn_angle - tank.angle)
 		
 		#put lower bound on speed: no slower than 40%
-		if magnitude < 0.2:
-			magnitude = 0.2
+		if magnitude < 0.4:
+			magnitude = 0.4
+			
+		fire = self.should_fire(tank)
 		
-		command = Command(tank.index, magnitude, 2 * relative_angle, True)
+		command = Command(tank.index, magnitude, 2 * relative_angle, fire)
 		self.commands.append(command)
 	
 	def get_obstacle_force(self, obstacle, x, y):
@@ -348,9 +360,9 @@ class GnuPlot():
 			target = self.agent.get_best_flag(x, y)
 			
 			#get deltas
-			delta_xG, delta_yG = [0, 0]
-			magnitude = 1
-			##delta_xG, delta_yG, magnitude = self.agent.calculate_objective_delta(x, y, target.x, target.y)
+			#delta_xG, delta_yG = [0, 0]
+			#magnitude = 1
+			delta_xG, delta_yG, magnitude = self.agent.calculate_objective_delta(x, y, target.x, target.y)
 			delta_xO, delta_yO = self.agent.calculate_obstacles_delta(x, y)
 			delta_xA, delta_yA = self.agent.calculate_enemies_delta(x, y, faketanks)
 			
