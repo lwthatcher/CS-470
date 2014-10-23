@@ -27,6 +27,7 @@ import random
 
 from bzrc import BZRC, Command
 from numpy import linspace
+import numpy as np
 
 from grid_filter_gl import Grid
 
@@ -52,7 +53,7 @@ class Agent(object):
 		self.aimtolerance = math.pi/20
 		
 		self.grid = Grid()
-		grid.init_window(100, 100)
+		self.grid.init_window(800, 800)
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -63,24 +64,27 @@ class Agent(object):
 		self.shots = shots
 		self.enemies = [tank for tank in othertanks if tank.color !=
 						self.constants['team']]
-		self.obstacles = self.bzrc.get_obstacles()
+		#self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		make_map = GnuPlot(self, self.flags, self.obstacles) 
+		#make_map = GnuPlot(self, self.flags, self.obstacles) 
+		
 		
 		if not self.wroteonce:
-			make_map.generateGnuMap()
+			#make_map.generateGnuMap()
 			self.wroteonce = True
 			self.grid.draw_grid()
+			self.grid.update_grid(np.ones((800,800)))
+			self.grid.draw_grid()
 		
-		for tank in mytanks:
+		"""for tank in mytanks:
 			if tank.flag == '-':
 				self.goto_flags(tank)
 			else:
 				base_x, base_y = self.get_base_center(self.get_my_base())
 				self.move_to_position(tank, base_x, base_y)
 
-		results = self.bzrc.do_commands(self.commands)
+		results = self.bzrc.do_commands(self.commands)"""
 
 
 	def get_my_base(self):
