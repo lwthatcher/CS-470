@@ -31,6 +31,7 @@ import numpy as np
 
 from world_grid import WorldGrid
 from grid_filter_gl import Grid
+from bayes import Bayes
 
 
 class Agent(object):
@@ -53,10 +54,8 @@ class Agent(object):
 		
 		#self.aimtolerance = math.pi/20
 		
-		self.grid = Grid()
-		self.grid.init_window(800, 800)
-		
 		self.world_grid = WorldGrid()
+		self.bayes = Bayes()
 		
 		self.turnprob = 0.05
 		self.turndecisionprob = 0.5
@@ -78,16 +77,6 @@ class Agent(object):
 		#self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		#make_map = GnuPlot(self, self.flags, self.obstacles) 
-		
-		
-		#if not self.wroteonce:
-			#make_map.generateGnuMap()
-			#self.wroteonce = True
-			#self.grid.draw_grid()
-			#self.grid.update_grid(np.ones((800,800)))
-			#self.grid.draw_grid()
-		
 
 		self.move(mytanks)
 	
@@ -95,24 +84,22 @@ class Agent(object):
 			pos, grid = self.bzrc.get_occgrid(tank.index)
 			self.update_priors(pos, grid)
 			
-		world_grid.draw_grid()
+		self.world_grid.draw_obstacle_grid()
 
 		results = self.bzrc.do_commands(self.commands)
 	
 	def update_priors(self, position, grid):
-		#print position
-		#print grid
 		for x in range(len(grid)):
 			for y in range(len(grid[x])):
-				prior = world_grid.get_world_value(x, y, position)
+				prior = self.world_grid.get_world_value(x, y, position)
 				observation = grid[x][y]
 				
 				if observation == self.OCCUPIED:
-					new_prior = probability_occupied_given_observed(prior)
+					new_prior = self.bayes.probability_occupied_given_observed(prior)
 				else:
-					new_prior = probability_occupied_given_not_observed(prior)
+					new_prior = self.bayes.probability_occupied_given_not_observed(prior)
 					
-				world_grid.set_world_value(x, y, position, new_prior)		
+				self.world_grid.set_world_value(x, y, position, new_prior)		
 	
 	def move(self, mytanks):
 		# it's not turning, so decide to turn or go straight
