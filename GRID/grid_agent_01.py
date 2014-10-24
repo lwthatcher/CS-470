@@ -29,6 +29,7 @@ from bzrc import BZRC, Command
 from numpy import linspace
 import numpy as np
 
+from world_grid import WorldGrid
 from grid_filter_gl import Grid
 
 
@@ -55,62 +56,91 @@ class Agent(object):
 		self.grid = Grid()
 		self.grid.init_window(800, 800)
 		
-		self.turnprob = 0.3
+		self.world_grid = WorldGrid()
+		
+		self.turnprob = 0.05
 		self.turndecisionprob = 0.5
+		self.turned = False
+		self.turniter = 0
+		self.TURN_MAX = 50
+		self.OCCUPIED = 1;
+		self.UNOCCUPIED = 0;
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
 		mytanks, othertanks, flags, shots = self.bzrc.get_lots_o_stuff()
 		self.mytanks = mytanks
-		self.othertanks = othertanks
-		self.flags = [flag for flag in flags if flag.color != self.constants['team']]
-		self.shots = shots
-		self.enemies = [tank for tank in othertanks if tank.color !=
-						self.constants['team']]
+		#self.othertanks = othertanks
+		#self.flags = [flag for flag in flags if flag.color != self.constants['team']]
+		#self.shots = shots
+		#self.enemies = [tank for tank in othertanks if tank.color !=
+		#				self.constants['team']]
 		#self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
 		#make_map = GnuPlot(self, self.flags, self.obstacles) 
 		
 		
-		if not self.wroteonce:
+		#if not self.wroteonce:
 			#make_map.generateGnuMap()
-			self.wroteonce = True
-			self.grid.draw_grid()
-			self.grid.update_grid(np.ones((800,800)))
-			self.grid.draw_grid()
+			#self.wroteonce = True
+			#self.grid.draw_grid()
+			#self.grid.update_grid(np.ones((800,800)))
+			#self.grid.draw_grid()
 		
-		rand = random.random() # returns a number [0, 1)
-		#print "rand", rand
-		if rand < self.turnprob:
-			for tank in mytanks:
-				self.turn(tank)
-		else: # go straight
-			for tank in mytanks:
-				#self.go_straight(tank)
-				command = Command(tank.index, 1, 0, False)
-				self.commands.append(command)
-				
+
+		self.move(mytanks)
+	
 		for tank in mytanks:
 			pos, grid = self.bzrc.get_occgrid(tank.index)
-		
-		"""for tank in mytanks:
-			if tank.flag == '-':
-				self.goto_flags(tank)
-			else:
-				base_x, base_y = self.get_base_center(self.get_my_base())
-				self.move_to_position(tank, base_x, base_y)"""
+			self.update_priors(pos, grid)
+			
+		world_grid.draw_grid()
 
 		results = self.bzrc.do_commands(self.commands)
+	
+	def update_priors(self, position, grid):
+		#print position
+		#print grid
+		for x in range(len(grid)):
+			for y in range(len(grid[x])):
+				prior = world_grid.get_world_value(x, y, position)
+				observation = grid[x][y]
+				
+				if observation == self.OCCUPIED:
+					new_prior = probability_occupied_given_observed(prior)
+				else:
+					new_prior = probability_occupied_given_not_observed(prior)
+					
+				world_grid.set_world_value(x, y, position, new_prior)		
+	
+	def move(self, mytanks):
+		# it's not turning, so decide to turn or go straight
+		if self.turned == False and self.turniter == 0: 
+			rand = random.random() # returns a number [0, 1)
+			if rand < self.turnprob:
+				for tank in mytanks:
+					self.turn(tank)
+					self.turned = True
+			else:
+				for tank in mytanks:
+					self.go_straight(tank)
 
+		else: # it is turning
+			self.turniter = self.turniter + 1
+			
+			if self.turniter >= self.TURN_MAX:
+				self.turned = False
+				self.turniter = 0
+	
 	def turn(self, tank):
-		#rand = random.random() # returns a number [0, 1)
-		#if rand < self.turndecisionprob:
+		rand = random.random() # returns a number [0, 1)
+		if rand < self.turndecisionprob:
 			command = Command(tank.index, 1, 1, False) # turn right
 			self.commands.append(command)
-		#else:
-			#command = Command(tank.index, 0.5, -1, False) # turn left
-			#self.commands.append(command)
+		else:
+			command = Command(tank.index, 0.5, -1, False) # turn left
+			self.commands.append(command)
 	
 	def go_straight(self, tank):
 		command = Command(tank.index, 1, 0, False)
@@ -357,127 +387,6 @@ class Agent(object):
 
 class Tank(object):
 	pass
-
-class GnuPlot():
-	
-	def __init__(self, agent, flags, obstacles):
-		self.agent = agent
-		self.bzrc = agent.bzrc
-		self.constants = self.bzrc.get_constants()
-		
-		self.FILENAME = 'plot.gpi'
-		self.WORLDSIZE = 800
-		self.SAMPLES = 50
-		self.VEC_LEN = 0.75 * self.WORLDSIZE / self.SAMPLES
-		
-		self.flags = flags
-		self.obstacles = obstacles
-		
-	
-	def generateGnuMap(self):
-		outfile = open(self.FILENAME, 'w')
-		minimum = -self.WORLDSIZE / 2
-		maximum = self.WORLDSIZE / 2
-		print >>outfile, self.gnuplot_header(minimum, maximum)
-		print >>outfile, self.draw_obstacles(self.bzrc.get_obstacles())
-		field_function = self.generate_field_function(150)
-		print >>outfile, self.plot_field(field_function)
-		outfile.close()
-		
-	def generate_field_function(self, scale):
-		
-		tank1 = Tank()
-		tank1.x = 0
-		tank1.y = 150
-		
-		tank2 = Tank()
-		tank2.x = 0
-		tank2.y = -200
-		
-		faketanks = [tank1, tank2]
-		
-		def function(x, y):
-			target = self.agent.get_best_flag(x, y)
-			
-			#get deltas
-			#delta_xG, delta_yG = [0, 0]
-			#magnitude = 1
-			delta_xG, delta_yG, magnitude = self.agent.calculate_objective_delta(x, y, target.x, target.y)
-			delta_xO, delta_yO = self.agent.calculate_obstacles_delta(x, y)
-			delta_xA, delta_yA = self.agent.calculate_enemies_delta(x, y, faketanks)
-			
-			#combine
-			delta_x = delta_xG + delta_xO + delta_xA
-			delta_y = delta_yG + delta_yO + delta_yA
-			
-			magnitude = math.sqrt(delta_x**2 + delta_y**2)
-			
-			return delta_x*scale*magnitude, delta_y*scale*magnitude
-			
-		return function
-	
-	def gpi_point(self, x, y, vec_x, vec_y):
-		'''Create the centered gpi data point (4-tuple) for a position and
-		vector.  The vectors are expected to be less than 1 in magnitude,
-		and larger values will be scaled down.'''
-		r = (vec_x ** 2 + vec_y ** 2) ** 0.5
-		if r > 1:
-			vec_x /= r
-			vec_y /= r
-		return (x - vec_x * self.VEC_LEN / 2, y - vec_y * self.VEC_LEN / 2,
-				vec_x * self.VEC_LEN, vec_y * self.VEC_LEN)
-	
-	def gnuplot_header(self, minimum, maximum):
-		'''Return a string that has all of the gnuplot sets and unsets.'''
-		s = ''
-		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
-		s += 'set yrange [%s: %s]\n' % (minimum, maximum)
-		# The key is just clutter.  Get rid of it:
-		s += 'unset key\n'
-		# Make sure the figure is square since the world is square:
-		s += 'set size square\n'
-		# Add a pretty title (optional):
-		#s += "set title 'Potential Fields'\n"
-		return s
-
-	def draw_line(self, p1, p2):
-		'''Return a string to tell Gnuplot to draw a line from point p1 to
-		point p2 in the form of a set command.'''
-		x1, y1 = p1
-		x2, y2 = p2
-		return 'set arrow from %s, %s to %s, %s nohead lt 3\n' % (x1, y1, x2, y2)
-
-	def draw_obstacles(self, obstacles):
-		'''Return a string which tells Gnuplot to draw all of the obstacles.'''
-		s = 'unset arrow\n'
-	
-		for obs in obstacles:
-			last_point = obs[0]
-			for cur_point in obs[1:]:
-				s += self.draw_line(last_point, cur_point)
-				last_point = cur_point
-			s += self.draw_line(last_point, obs[0])
-		return s
-
-	def plot_field(self, function):
-		'''Return a Gnuplot command to plot a field.'''
-		s = "plot '-' with vectors head\n"
-	
-		separation = self.WORLDSIZE / self.SAMPLES
-		end = self.WORLDSIZE / 2 - separation / 2
-		start = -end
-
-		points = ((x, y) for x in linspace(start, end, self.SAMPLES)
-					for y in linspace(start, end, self.SAMPLES))
-	
-		for x, y in points:
-			f_x, f_y = function(x, y)
-			plotvalues = self.gpi_point(x, y, f_x, f_y)
-			if plotvalues is not None:
-				x1, y1, x2, y2 = plotvalues
-				s += '%s %s %s %s\n' % (x1, y1, x2, y2)
-		s += 'e\n'
-		return s
 
 def main():
 	# Process CLI arguments.
