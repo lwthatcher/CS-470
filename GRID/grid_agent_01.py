@@ -55,7 +55,7 @@ class Agent(object):
 		self.grid = Grid()
 		self.grid.init_window(800, 800)
 		
-		self.turnprob = 0.1
+		self.turnprob = 0.3
 		self.turndecisionprob = 0.5
 
 	def tick(self, time_diff):
@@ -81,31 +81,38 @@ class Agent(object):
 			self.grid.draw_grid()
 		
 		rand = random.random() # returns a number [0, 1)
-		
+		#print "rand", rand
 		if rand < self.turnprob:
+			print "turning"
 			for tank in mytanks:
 				self.turn(tank)
 		else:
+			#print "go straight"
 			for tank in mytanks:
-				self.go_straight(tank)
+				#self.go_straight(tank)
+				command = Command(tank.index, 1, 0, False)
+				self.commands.append(command)
+				
+		for tank in mytanks:
+			pos, grid = self.bzrc.get_occgrid(tank.index)
 		
 		"""for tank in mytanks:
 			if tank.flag == '-':
 				self.goto_flags(tank)
 			else:
 				base_x, base_y = self.get_base_center(self.get_my_base())
-				self.move_to_position(tank, base_x, base_y)
+				self.move_to_position(tank, base_x, base_y)"""
 
-		results = self.bzrc.do_commands(self.commands)"""
+		results = self.bzrc.do_commands(self.commands)
 
 	def turn(self, tank):
-		rand = random.random() # returns a number [0, 1)
-		if rand < self.turndecisionprob:
-			command = Command(tank.index, 0.5, 1, False) # turn right
+		#rand = random.random() # returns a number [0, 1)
+		#if rand < self.turndecisionprob:
+			command = Command(tank.index, 1, 1, False) # turn right
 			self.commands.append(command)
-		else:
-			command = Command(tank.index, 0.5, -1, False) # turn left
-			self.commands.append(command)
+		#else:
+			#command = Command(tank.index, 0.5, -1, False) # turn left
+			#self.commands.append(command)
 	
 	def go_straight(self, tank):
 		command = Command(tank.index, 1, 0, False)
