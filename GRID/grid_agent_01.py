@@ -39,18 +39,18 @@ class Agent(object):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
-		self.ALPHA = 0.01
-		self.BETA = 0.3
-		self.OBS_TOLERANCE = 35.0
-		self.S = 50
+		#self.ALPHA = 0.01
+		#self.BETA = 0.3
+		#self.OBS_TOLERANCE = 35.0
+		#self.S = 50
 		self.wroteonce = False
-		self.goalradius = 30
+		#self.goalradius = 30
 		
-		self.tankradius = 5
-		self.avoidradius = 50
-		self.avoidBETA = 0.05
+		#self.tankradius = 5
+		#self.avoidradius = 50
+		#self.avoidBETA = 0.05
 		
-		self.aimtolerance = math.pi/20
+		#self.aimtolerance = math.pi/20
 		
 		self.grid = Grid()
 		self.grid.init_window(800, 800)
@@ -83,11 +83,9 @@ class Agent(object):
 		rand = random.random() # returns a number [0, 1)
 		#print "rand", rand
 		if rand < self.turnprob:
-			print "turning"
 			for tank in mytanks:
 				self.turn(tank)
-		else:
-			#print "go straight"
+		else: # go straight
 			for tank in mytanks:
 				#self.go_straight(tank)
 				command = Command(tank.index, 1, 0, False)
