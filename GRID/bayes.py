@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
-import OpenGL
-OpenGL.ERROR_CHECKING = False
-from OpenGL.GL import *
-from OpenGL.GLUT import *
-from OpenGL.GLU import *
-from numpy import zeros
+##OpenGL.ERROR_CHECKING = False
+#from OpenGL.GL import *
+#from OpenGL.GLUT import *
+#from OpenGL.GLU import *
+#from numpy import zeros
 
 class Bayes:
 	
@@ -36,4 +35,3 @@ class Bayes:
 		answer = self.OBS_GIVEN_NOT_OCC * not_occ
 		return answer
 
-# vim: et sw=4 sts=4
