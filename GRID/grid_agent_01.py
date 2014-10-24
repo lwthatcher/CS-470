@@ -48,12 +48,15 @@ class Agent(object):
 		
 		self.tankradius = 5
 		self.avoidradius = 50
-		self.avoidBETA = 0.1
+		self.avoidBETA = 0.05
 		
 		self.aimtolerance = math.pi/20
 		
 		self.grid = Grid()
 		self.grid.init_window(800, 800)
+		
+		self.turnprob = 0.1
+		self.turndecisionprob = 0.5
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -77,6 +80,15 @@ class Agent(object):
 			self.grid.update_grid(np.ones((800,800)))
 			self.grid.draw_grid()
 		
+		rand = random.random() # returns a number [0, 1)
+		
+		if rand < self.turnprob:
+			for tank in mytanks:
+				self.turn(tank)
+		else:
+			for tank in mytanks:
+				self.go_straight(tank)
+		
 		"""for tank in mytanks:
 			if tank.flag == '-':
 				self.goto_flags(tank)
@@ -86,7 +98,19 @@ class Agent(object):
 
 		results = self.bzrc.do_commands(self.commands)"""
 
-
+	def turn(self, tank):
+		rand = random.random() # returns a number [0, 1)
+		if rand < self.turndecisionprob:
+			command = Command(tank.index, 0.5, 1, False) # turn right
+			self.commands.append(command)
+		else:
+			command = Command(tank.index, 0.5, -1, False) # turn left
+			self.commands.append(command)
+	
+	def go_straight(self, tank):
+		command = Command(tank.index, 1, 0, False)
+		self.commands.append(command)
+	
 	def get_my_base(self):
 		mybases = [base for base in self.bzrc.get_bases() if base.color == self.constants['team']]
 		mybase = mybases[0]
