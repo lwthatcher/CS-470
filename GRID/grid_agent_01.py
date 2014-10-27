@@ -41,18 +41,18 @@ class Agent(object):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
-		#self.ALPHA = 0.01
-		#self.BETA = 0.3
-		#self.OBS_TOLERANCE = 35.0
-		#self.S = 50
+		self.ALPHA = 0.01
+		self.BETA = 0.3
+		self.OBS_TOLERANCE = 35.0
+		self.S = 50
 		self.wroteonce = False
-		#self.goalradius = 30
+		self.goalradius = 30
 		
-		#self.tankradius = 5
-		#self.avoidradius = 50
-		#self.avoidBETA = 0.05
+		self.tankradius = 5
+		self.avoidradius = 50
+		self.avoidBETA = 0.05
 		
-		#self.aimtolerance = math.pi/20
+		self.aimtolerance = math.pi/20
 		
 		self.world_grid = WorldGrid()
 		self.bayes = Bayes()
@@ -69,11 +69,11 @@ class Agent(object):
 		"""Some time has passed; decide what to do next."""
 		mytanks, othertanks, flags, shots = self.bzrc.get_lots_o_stuff()
 		self.mytanks = mytanks
-		#self.othertanks = othertanks
-		#self.flags = [flag for flag in flags if flag.color != self.constants['team']]
-		#self.shots = shots
-		#self.enemies = [tank for tank in othertanks if tank.color !=
-		#				self.constants['team']]
+		self.othertanks = othertanks
+		self.flags = [flag for flag in flags if flag.color != self.constants['team']]
+		self.shots = shots
+		self.enemies = [tank for tank in othertanks if tank.color !=
+						self.constants['team']]
 		#self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
@@ -85,6 +85,13 @@ class Agent(object):
 			self.update_priors(pos, grid)
 			
 		self.world_grid.draw_obstacle_grid()
+		
+		for tank in mytanks:
+			if tank.flag == '-':
+				self.goto_flags(tank)
+			else:
+				base_x, base_y = self.get_base_center(self.get_my_base())
+				self.move_to_position(tank, base_x, base_y)
 
 		results = self.bzrc.do_commands(self.commands)
 	
@@ -227,7 +234,7 @@ class Agent(object):
 			
 		return delta_xG, delta_yG, magnitude
 
-	def calculate_obstacles_delta(self, x, y):
+	"""def calculate_obstacles_delta(self, x, y):
 		delta_xO = 0
 		delta_yO = 0
 		
@@ -249,7 +256,7 @@ class Agent(object):
 			print "delta_xO: ", delta_xO
 			print "delta_yO: ", delta_yO'''
 			
-		return delta_xO, delta_yO
+		return delta_xO, delta_yO"""
 
 	def calculate_random_delta(self):
 		dx = random.uniform(-.01, .01)
@@ -269,7 +276,8 @@ class Agent(object):
 		
 		#get deltas
 		delta_xG, delta_yG, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_x, target_y)
-		delta_xO, delta_yO = self.calculate_obstacles_delta(tank.x, tank.y)
+		#delta_xO, delta_yO = self.calculate_obstacles_delta(tank.x, tank.y)
+		delta_xO, delta_yO = 0, 0
 		delta_xR, delta_yR = self.calculate_random_delta()
 		delta_xA, delta_yA = self.calculate_enemies_delta(tank.x, tank.y, self.enemies)
 		
