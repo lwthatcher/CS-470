@@ -33,7 +33,7 @@ class WorldGrid:
 		offset_x = grid_x + origin_x
 		offset_y = grid_y + origin_y
 		x, y = self.coordinates_to_indexes(offset_x, offset_y)
-		return x, y
+		return y, x
 		
 	def get_world_value(self, grid_x, grid_y, pos):
 		x,y = self.grid_to_indexes(grid_x, grid_y, pos)
