@@ -15,6 +15,12 @@ class Bayes:
 		self.NOT_OBS_GIVEN_OCC = 0.03
 		self.OBS_GIVEN_NOT_OCC = 0.1
 		
+	def set_obs_given_occ(self, prob):
+		self.OBS_GIVEN_OCC = prob
+		
+	def self_not_obs_given_not_occ(self, prob):
+		self.NOT_OBS_GIVEN_NOT_OCC = prob
+		
 	def probability_occupied_given_observed(self, prior):
 		numerator = self.OBS_GIVEN_OCC * prior
 		denominator = self.prob_obs(prior)
