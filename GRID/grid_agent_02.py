@@ -76,9 +76,6 @@ class Agent(object):
 						self.constants['team']]
 		#self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
-		
-
-		self.move(mytanks)
 	
 		for tank in mytanks:
 			pos, grid = self.bzrc.get_occgrid(tank.index)
@@ -87,11 +84,7 @@ class Agent(object):
 		self.world_grid.draw_obstacle_grid()
 		
 		for tank in mytanks:
-			if tank.flag == '-':
-				self.goto_flags(tank)
-			else:
-				base_x, base_y = self.get_base_center(self.get_my_base())
-				self.move_to_position(tank, base_x, base_y)
+			self.goto_closest_target(tank)
 
 		results = self.bzrc.do_commands(self.commands)
 	
@@ -149,6 +142,26 @@ class Agent(object):
 		center_x = ((base.corner1_x + base.corner2_x + base.corner3_x + base.corner4_x) / 4)
 		center_y = ((base.corner1_y + base.corner2_y + base.corner3_y + base.corner4_y) / 4)
 		return center_x, center_y
+		
+	def goto_closest_target(self, tank):
+		best_tar = self.get_best_target(tank.x, tank.y)
+		if best_tar is None:
+			command = Command(tank.index, 0, 0, False)
+			self.commands.append(command)
+		else:
+			self.move_to_position(tank, best_tar[0], best_tar[1])
+
+	def get_best_target(self, x, y):
+		best_tar = None
+		best_dist = 2 * float(self.constants['worldsize'])
+		for tar in self.world_grid.getTargetLocations():
+			print('TARGET')
+			print(tar)
+			dist = math.sqrt((tar[0] - x)**2 + (tar[1] - y)**2)
+			if dist < best_dist:
+				best_dist = dist
+				best_tar = tar
+		return best_tar
 
 	def goto_flags(self, tank):
 		best_flag = self.get_best_flag(tank.x, tank.y)

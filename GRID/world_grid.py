@@ -7,6 +7,7 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from numpy import zeros, linspace
 import numpy as np
+import random
 
 from grid_filter_gl import Grid
 
@@ -16,6 +17,10 @@ class WorldGrid:
 		self.DEFAULT_PRIOR = 0.1
 		self.MAP_WIDTH = 800
 		self.MAP_HEIGHT = 800
+		self.NUM_SPOTS = 5
+		self.DIFF = 50
+		
+		self.potentials = []
 		
 		self.grid = np.zeros((self.MAP_WIDTH, self.MAP_HEIGHT))
 		self.grid.fill(self.DEFAULT_PRIOR)
@@ -46,5 +51,38 @@ class WorldGrid:
 	def draw_obstacle_grid(self):
 		self.draw_grid.update_grid(self.grid)
 		self.draw_grid.draw_grid();
+	
+	def getPartialGrid(self):
+		x = 0
+		y = 0
+		result = []
+		while x < self.MAP_WIDTH:
+			while y < self.MAP_HEIGHT:
+				pos = (x,y)
+				if self.isUnvisited(pos):
+					result.append(pos)
+				y += self.DIFF
+			x += self.DIFF
+		return result
+	
+	def getNewUnvistedLocation(self):
+		positions = self.getPartialGrid()
+		i = random.randrange(len(positions))
+		return positions[i]
 		
-
+	
+	def isUnvisited(self, pos):
+		x, y = pos
+		if self.grid[x,y] == self.DEFAULT_PRIOR:
+			return True
+		return False
+		
+	def getTargetLocations(self):
+		while len(self.potentials) < self.NUM_SPOTS:
+			self.potentials.append(self.getNewUnvistedLocation())
+		
+		for i in range(0, self.NUM_SPOTS - 1):
+			pos = self.potentials[i]
+			if not self.isUnvisited(pos):
+				self.potentials[i] = self.getNewUnvistedLocation()
+		return self.potentials
