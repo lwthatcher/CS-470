@@ -37,7 +37,7 @@ from bayes import Bayes
 class Agent(object):
 	"""Class handles all command and control logic for a teams tanks."""
 
-	def __init__(self, bzrc, bayes):
+	def __init__(self, bzrc):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
@@ -55,7 +55,7 @@ class Agent(object):
 		self.aimtolerance = math.pi/20
 		
 		self.world_grid = WorldGrid()
-		self.bayes = bayes
+		self.bayes = Bayes()
 		
 		self.turnprob = 0.05
 		self.turndecisionprob = 0.5
@@ -409,13 +409,8 @@ def main():
 	# Connect.
 	#bzrc = BZRC(host, int(port), debug=True)
 	bzrc = BZRC(host, int(port))
-	
-	bayes = Bayes()
-	constants = bzrc.get_constants()
-	bayes.self_not_obs_given_not_occ(float(constants['truenegative']))
-	bayes.set_obs_given_occ(float(constants['truepositive']))
-	
-	agent = Agent(bzrc, bayes)
+
+	agent = Agent(bzrc)
 
 	prev_time = time.time()
 

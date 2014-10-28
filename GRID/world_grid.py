@@ -50,8 +50,8 @@ class WorldGrid:
 		
 	def draw_obstacle_grid(self):
 		self.draw_grid.update_grid(self.grid)
-		self.draw_grid.draw_grid()
-		#self.draw_grid.draw_grid(self.potentials)
+		#self.draw_grid.draw_grid()
+		self.draw_grid.draw_grid(self.potentials)
 	
 	def getPartialGrid(self):
 		x = -self.MAP_WIDTH / 2

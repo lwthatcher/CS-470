@@ -6,6 +6,7 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from numpy import zeros
+import numpy as np
 
 class Grid:
 	
@@ -18,9 +19,16 @@ class Grid:
 	def draw_grid(self, points):
 		# This assumes you are using a numpy array for your grid
 		width, height = self.grid.shape
+		
+		targets = zeros((width, height))
+		
+		for pos in points:
+			self.set_surrounding_pixels(targets, pos)
+			
+		draw = self.grid+targets
+		
 		glRasterPos2f(-1, -1)
-		glDrawPixels(width, height, GL_LUMINANCE, GL_FLOAT, self.grid)
-		glDrawPixels(width, height, GL_RED, GL_FLOAT, points)
+		glDrawPixels(width, height, GL_LUMINANCE, GL_FLOAT, draw)
 		glFlush()
 		glutSwapBuffers()
 
@@ -28,7 +36,17 @@ class Grid:
 		#global grid
 		self.grid = new_grid
 
-
+	def set_surrounding_pixels(self, targets, pos):
+		x,y = pos
+		targets[x-1,y-1] = 1
+		targets[x,y-1] = 1
+		targets[x+1,y-1] = 1
+		targets[x,y-1] = 1
+		targets[x,y] = 1
+		targets[x,y+1] = 1
+		targets[x+1,y-1] = 1
+		targets[x+1,y] = 1
+		targets[x+1,y+1] = 1
 
 	def init_window(self, width, height):
 		global window
