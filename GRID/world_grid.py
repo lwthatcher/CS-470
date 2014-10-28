@@ -56,13 +56,17 @@ class WorldGrid:
 		x = 0
 		y = 0
 		result = []
-		while x < self.MAP_WIDTH:
-			while y < self.MAP_HEIGHT:
+		while x < self.MAP_WIDTH /2:
+			print "x: ", x
+			while y < self.MAP_HEIGHT /2:
+				print "y: ", y
 				pos = (x,y)
 				if self.isUnvisited(pos):
+					print "adding ", pos
 					result.append(pos)
 				y += self.DIFF
 			x += self.DIFF
+		print "Partial Grid: ", result
 		return result
 	
 	def getNewUnvistedLocation(self):
@@ -73,16 +77,28 @@ class WorldGrid:
 	
 	def isUnvisited(self, pos):
 		x, y = pos
-		if self.grid[x,y] == self.DEFAULT_PRIOR:
+		i, j = self.coordinates_to_indexes(x, y)
+		
+		value = self.grid[x,y]
+		value2 = self.grid[i,j]
+		value3 = self.grid[j, i]
+		value4 = self.grid[y,x]
+
+		#print "(", i, ",", j, ") = ", value4
+		print "(", x, ",", y, ") = ", value3
+		#print "(", i, ",", j, ") = ", value2
+		#print "(", x, ",", y, ") = ", value
+		if value3 == self.DEFAULT_PRIOR:
 			return True
 		return False
 		
 	def getTargetLocations(self):
+		print "getting locations!"
 		while len(self.potentials) < self.NUM_SPOTS:
 			self.potentials.append(self.getNewUnvistedLocation())
 		
 		for i in range(0, self.NUM_SPOTS - 1):
 			pos = self.potentials[i]
 			if not self.isUnvisited(pos):
-				self.potentials[i] = self.getNewUnvistedLocation()
+				self.potentials[i] = self.getNewUnvistedLocation() 
 		return self.potentials
