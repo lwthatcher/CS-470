@@ -53,8 +53,8 @@ class WorldGrid:
 		self.draw_grid.draw_grid();
 	
 	def getPartialGrid(self):
-		x = 0
-		y = 0
+		x = -self.MAP_WIDTH / 2
+		y = -self.MAP_HEIGHT / 2
 		result = []
 		while x < self.MAP_WIDTH /2:
 			print "x: ", x
@@ -65,6 +65,7 @@ class WorldGrid:
 					print "adding ", pos
 					result.append(pos)
 				y += self.DIFF
+			y = -self.MAP_HEIGHT / 2
 			x += self.DIFF
 		print "Partial Grid: ", result
 		return result
@@ -84,8 +85,8 @@ class WorldGrid:
 		value3 = self.grid[j, i]
 		value4 = self.grid[y,x]
 
-		#print "(", i, ",", j, ") = ", value4
-		print "(", x, ",", y, ") = ", value3
+		print "(", i, ",", abs(j), ") = ", value3
+		print "(", x, ",", y, ") = "
 		#print "(", i, ",", j, ") = ", value2
 		#print "(", x, ",", y, ") = ", value
 		if value3 == self.DEFAULT_PRIOR:
@@ -94,7 +95,7 @@ class WorldGrid:
 		
 	def getTargetLocations(self):
 		print "getting locations!"
-		while len(self.potentials) < self.NUM_SPOTS:
+		while len(self.potentials) <= self.NUM_SPOTS:
 			self.potentials.append(self.getNewUnvistedLocation())
 		
 		for i in range(0, self.NUM_SPOTS - 1):
