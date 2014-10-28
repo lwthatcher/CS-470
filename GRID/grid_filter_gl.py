@@ -14,6 +14,7 @@ class Grid:
 	
 	def __init__(self):
 		self.grid = None
+		#self.world = WorldGrid()
 		
 
 	def draw_grid(self, points):
@@ -37,7 +38,9 @@ class Grid:
 		self.grid = new_grid
 
 	def set_surrounding_pixels(self, targets, pos):
-		x,y = pos
+		x1,y1 = pos
+		y,x = self.coordinates_to_indexes(x1, y1)
+		print "printing target ", x, ",", y
 		targets[x-1,y-1] = 1
 		targets[x,y-1] = 1
 		targets[x+1,y-1] = 1
@@ -64,6 +67,12 @@ class Grid:
 		glLoadIdentity()
 		#glutMainLoop()
 
+	def coordinates_to_indexes(self, x, y):
+		width, height = self.grid.shape
+		
+		i = x + (width / 2)
+		j = y - (height / 2)
+		return i, j
 
 
 # vim: et sw=4 sts=4
