@@ -15,11 +15,12 @@ class Grid:
 		self.grid = None
 		
 
-	def draw_grid(self):
+	def draw_grid(self, points):
 		# This assumes you are using a numpy array for your grid
 		width, height = self.grid.shape
 		glRasterPos2f(-1, -1)
 		glDrawPixels(width, height, GL_LUMINANCE, GL_FLOAT, self.grid)
+		glDrawPixels(width, height, GL_RED, GL_FLOAT, points)
 		glFlush()
 		glutSwapBuffers()
 

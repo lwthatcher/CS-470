@@ -50,7 +50,8 @@ class WorldGrid:
 		
 	def draw_obstacle_grid(self):
 		self.draw_grid.update_grid(self.grid)
-		self.draw_grid.draw_grid();
+		self.draw_grid.draw_grid()
+		#self.draw_grid.draw_grid(self.potentials)
 	
 	def getPartialGrid(self):
 		x = -self.MAP_WIDTH / 2
@@ -86,7 +87,7 @@ class WorldGrid:
 		value4 = self.grid[y,x]
 
 		print "(", i, ",", abs(j), ") = ", value3
-		print "(", x, ",", y, ") = "
+		#print "(", x, ",", y, ") = "
 		#print "(", i, ",", j, ") = ", value2
 		#print "(", x, ",", y, ") = ", value
 		if value3 == self.DEFAULT_PRIOR:
@@ -94,11 +95,11 @@ class WorldGrid:
 		return False
 		
 	def getTargetLocations(self):
-		print "getting locations!"
-		while len(self.potentials) <= self.NUM_SPOTS:
+		print "Potentials: ", self.potentials
+		while len(self.potentials) < self.NUM_SPOTS:
 			self.potentials.append(self.getNewUnvistedLocation())
 		
-		for i in range(0, self.NUM_SPOTS - 1):
+		for i in range(0, self.NUM_SPOTS):
 			pos = self.potentials[i]
 			if not self.isUnvisited(pos):
 				self.potentials[i] = self.getNewUnvistedLocation() 
