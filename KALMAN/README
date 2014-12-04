@@ -1,6 +1,10 @@
 <h1>Kalman Lab</h1>
 
 This is a group (pairs) lab.
+
+This lab is still under construction. What is here is fine but there will be a little added.
+
+<h3>objective</h3>
  
 
 The purpose of this lab is to give you an idea of what the Kalman Filter does and under what conditions it works well (HINT: it doesn't work perfectly in every situation). In addition to tracking enemy tanks, the Kalman Filter will help you compensate for sensor noise, which is introduced in this lab. You will be required to do the following:
@@ -13,8 +17,8 @@ The purpose of this lab is to give you an idea of what the Kalman Filter does an
     Compete in a full game with others
 
 Note that the numbers provided below are just a starting point. I expect you to have to adjust them to get this to work, that will be the hard part.
-Description
-Conforming Clay Pigeon
+<h2>Description</h2>
+<h3>Conforming Clay Pigeon</h3>
 
 The Kalman Filter makes a number of assumptions about the path that the tracked object is following. Your first task is to code several "Clay Pigeon" that conforms to these assumptions. You will make 2 Conforming Clay Pigeons which behave in the following ways:
 
@@ -22,12 +26,12 @@ The Kalman Filter makes a number of assumptions about the path that the tracked 
     Constant x and y velocity (a straight line)
 
  
-Non-conforming Clay Pigeon (the "Wild Pigeon")
+<h3>Non-conforming Clay Pigeon (the "Wild Pigeon")</h3>
 
 Your second task is to build a Clay Pigeon that violates the Kalman assumptions in some way (your choice). Try to make it as hard to hit as you can.
 
  
-The Kalman Agent
+<h3>The Kalman Agent</h3>
 
 Your Kalman Agent must also plot the density of the output of the Kalman Filter (see GnuplotHelp). You will need to plot your filtered estimate of the current location of the clay pigeons and the projected locations. Please code up the plot early rather than at the end of the project; it is a great debugging tool and will really help you understand what is happening with the Kalman Filter.
 
@@ -36,7 +40,7 @@ Use the empty world (remove all obstacles). Both teams should be run with --[col
 Part of your task is to tune your Kalman agent to do as well as possible on your Wild Pigeon. When reporting your results, explaining exactly why you had difficulty and what you tried to do about it. Communicate the creative efforts you used to mislead the Kalman Filter and what you did to try to overcome these problems.
 
  
-Example Matrices
+<h2>Example Matrices</h2>
 
 To accomplish this lab, it is helpful to understand the "physics" used by the enemy agent. We will represent these physics using matrices as done in the class discussions. You will want to play with the values in these matrices, especially Σx and Σz, and we encourage you to do so in order to better understand how the Kalman Filter works.
 
@@ -47,7 +51,7 @@ X_t = \begin{bmatrix} x_t \\ \dot{x}_t \\ \ddot{x}_t \\ y_t \\ \dot{y}_t \\ \ddo
 where x and y are the (x,y) position of the enemy agent, \dot{x} is the x component of the agent's velocity, \ddot{x} is the x component of the agent's acceleration, and etc. Note that we use Xt to represent the entire observation at time t.
 
  
-Initialization
+<h3>Initialization</h3>
 
 Given this state vector, the Kalman Filter will produce a mean estimate for this vector μ and a covariance matrix for this vector Σ. So, your initial estimates of the mean and covariance could look like these:
 
@@ -60,7 +64,7 @@ which means that you think the agent begins at the origin with no velocity and n
 which means that you are pretty sure that the agent is not accelerating or going anywhere, but that you are pretty unsure exactly where the agent is.
 
  
-Motion or Transition
+<h3>Motion or Transition</h3>
 
 Our model assumes that once every time period (Δt), the enemy agent's state X will be updated by the server as follows:
 
@@ -73,7 +77,7 @@ F = \begin{bmatrix} 1 & \Delta t & \Delta t^2/2 & 0 & 0 & 0 \\ 0 & 1 & \Delta t 
 where the c indicates that we have a linear friction force working against this agent. If in this lab, you re-compute every half-second then Δt = 0.5. Try setting the friction coefficient c to 0 to start out with because there is no friction in the server. In my experience that works best but some students have said that it was easier to get it running with a small c.
 
  
-Uncertainty
+<h3>Uncertainty</h3>
 
 Each Xt is a sample drawn from a multivariate normal distribution. In our model the x and y positions and velocities are determined by newtonian physics. The x and y accelerations are uncertain.  A good place to start is with a covariance matrix that allows acceleration to vary from the model more than velocity or position, like the following:
 
@@ -100,7 +104,7 @@ Since these measurements are corrupted by noise, it is important to know the cov
 NOTE: I may change this, make it a parameter!
 
  
-Implementation Hints
+<h3>Implementation Hints</h3>
 
     You are more than welcome to implement your own matrix manipulation code. However, you are encouraged to spend your precious time on more important things. Find a reputable source and download a matrix package. If you are using python, I think all of the needed matrix operators are available in numpy. I think numpy is on the lab machines.
     Here are the three Kalman update equations (NOTE: The third equation is wrong in the first and second edition of the book! It was fixed for the third edition):
@@ -120,7 +124,7 @@ Kt + 1 = (FΣtFT + Σx)HT(H(FΣtFT + Σx)HT + Σz) − 1
     To apply predictions into the future, you don't make additional observations, so you shouldn't use the full equations. Instead, use this equation:
 
 μt + 1 = Fμt
-What to Turn In
+<h2>What to Turn In</h2>
 
 To pass off this lab, you will:
 
