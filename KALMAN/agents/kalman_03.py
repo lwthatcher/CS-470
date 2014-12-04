@@ -48,6 +48,8 @@ class Agent(object):
 		
 		self.COLORS = ['blue','red','green','purple']
 		self.color_index = 0
+		
+		self.DELTA_T = 0.005
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -62,9 +64,13 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		print(self.othertanks)
+		print(self.enemies)
 		
-		make_map = GnuPlot(self, self.sigma.x, self.sigma.y, self.mu_x, self.mu_y, self.rho) 
+		for tank in self.enemies:
+			pass
+		
+		
+		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho) 
 		
 		if not self.wroteonce:
 			make_map.generateGnuMap()
@@ -342,8 +348,9 @@ class GnuPlot():
 		print >>outfile, 'set isosamples 100\n'
 		print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
 		print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
-        * exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
-        - 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d'
+		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
+		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
+
 		outfile.close()
 	
 	def gnuplot_header(self, minimum, maximum):
