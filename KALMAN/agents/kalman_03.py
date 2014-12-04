@@ -72,6 +72,7 @@ class Agent(object):
 			# initialize the estimated positions for all of the enemy tanks
 			for tank in self.enemies:
 				self.mus.append([tank.x,tank.y])
+			print(self.mus)
 			make_map.generateGnuMap(self.mus)
 			self.wroteonce = True
 
