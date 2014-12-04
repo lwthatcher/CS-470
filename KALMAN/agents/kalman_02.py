@@ -51,6 +51,12 @@ class Agent(object):
 		self.color_index = 0
 		
 		self.DELTA_T = 0.005
+		self.SIGMA_X = np.matrix('25 0;0 25')
+		self.SIGMA_Z = np.matrix([[.1, 0, 0, 0, 0, 0],[0, .2, 0, 0, 0, 0],[0, 0, 90, 0, 0, 0],[0, 0, 0, .1, 0, 0],[0, 0, 0, 0, .2, 0],[0, 0, 0, 0, 0, 90]])
+		
+		
+		print 'Sigma x:',SIGMA_X
+		print 'Sigma z:',SIGMA_Z
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
