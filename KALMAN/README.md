@@ -46,7 +46,7 @@ To accomplish this lab, it is helpful to understand the "physics" used by the en
 
 Initially, your clay pigeons will be at some unknown position on the playing field, and the velocity and acceleration will both be zero. You can use that information to create your initial estimates of the mean and covariance. The physics are based on the six values in our state vector (in this order, represented as a column vector):
 
-![Alt text](/KALMAN/Xt.png?raw=true)
+![Alt text](/KALMAN/img/Xt.png?raw=true)
 
 where x and y are the (x,y) position of the enemy agent, \dot{x} is the x component of the agent's velocity, \ddot{x} is the x component of the agent's acceleration, and etc. Note that we use Xt to represent the entire observation at time t.
 
@@ -55,11 +55,11 @@ where x and y are the (x,y) position of the enemy agent, \dot{x} is the x compon
 
 Given this state vector, the Kalman Filter will produce a mean estimate for this vector μ and a covariance matrix for this vector Σ. So, your initial estimates of the mean and covariance could look like these:
 
-<b>μ</b>0 = <table><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td></table>
+![Alt text](/KALMAN/img/mu_knot.png?raw=true)
 
 which means that you think the agent begins at the origin with no velocity and no acceleration, and
 
-\Sigma_0 = \begin{bmatrix} 100 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0.1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0.1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 100 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0.1 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0.1 \end{bmatrix}
+![Alt text](/KALMAN/img/Sigma_knot.png?raw=true)
 
 which means that you are pretty sure that the agent is not accelerating or going anywhere, but that you are pretty unsure exactly where the agent is.
 
@@ -72,7 +72,7 @@ Xt+1∼N(FXt,Σx)
 
 In other words, the location of the enemy agent is drawn from a normal distribution (represented by "N")  with a mean vector with the value FXt and a variance/covariance of ΣX. You can read the ∼ as "is randomly drawn from". That is, Xt+1 will be randomly chosen from a normal distribution centered at a new location based on the old location (Xt) with the motion model F applied (yielding FXt). Since the initial state and all subsequent states are random variables, these variables are capitalized to be consistent with our notes in class. The F matrix used in this lab is precisely the one that we derived in class using Newton's laws of motion (with one exception):
 
-F = \begin{bmatrix} 1 & \Delta t & \Delta t^2/2 & 0 & 0 & 0 \\ 0 & 1 & \Delta t & 0 & 0 & 0 \\ 0 & -c & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & \Delta t & \Delta t^2/2 \\ 0 & 0 & 0 & 0 & 1 & \Delta t \\ 0 & 0 & 0 & 0 & -c & 1 \end{bmatrix}
+![Alt text](/KALMAN/img/F.png?raw=true)
 
 where the c indicates that we have a linear friction force working against this agent. If in this lab, you re-compute every half-second then Δt = 0.5. Try setting the friction coefficient c to 0 to start out with because there is no friction in the server. In my experience that works best but some students have said that it was easier to get it running with a small c.
 
@@ -81,7 +81,7 @@ where the c indicates that we have a linear friction force working against this 
 
 Each Xt is a sample drawn from a multivariate normal distribution. In our model the x and y positions and velocities are determined by newtonian physics. The x and y accelerations are uncertain.  A good place to start is with a covariance matrix that allows acceleration to vary from the model more than velocity or position, like the following:
 
-\Sigma_x = \begin{bmatrix} 0.1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0.1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 100 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0.1 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0.1 & 0 \\ 0 & 0 & 0 & 0 & 0 & 100 \end{bmatrix}
+![Alt text](/KALMAN/img/Sigma_x.png?raw=true)
 
 Note that there are some other influences on the behavior of the agent (such as being stopped by running into a wall) that are not included in the newtonian model. For this reason the covariance matrix given above, does not use zeros for the position and velocity entries. You might find that 100 is probably too big for the variance in acceleration. You will want play with the values in this covariance matrix.
 
@@ -95,11 +95,11 @@ NOTE: As I recall, while you get x and y positions and \dot{x} and \dot{y} veloc
 
 The observation matrix, H, selects out the two "position" values from the state vector. It looks like this:
 
-H = \begin{bmatrix} 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 \end{bmatrix}
+![Alt text](/KALMAN/img/H.png?raw=true)
 
 Since these measurements are corrupted by noise, it is important to know the covariance matrix of this noise. Since the standard deviation of the x and y position noise is 5 and since these two noises are uncorrelated, the covariance matrix is given by:
 
-\Sigma_z = \begin{bmatrix} 25 & 0 \\ 0 & 25 \end{bmatrix}
+![Alt text](/KALMAN/img/Sigma_z.png?raw=true)
 
 NOTE: I may change this, make it a parameter!
 

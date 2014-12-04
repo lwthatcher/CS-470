@@ -46,7 +46,7 @@ To accomplish this lab, it is helpful to understand the "physics" used by the en
 
 Initially, your clay pigeons will be at some unknown position on the playing field, and the velocity and acceleration will both be zero. You can use that information to create your initial estimates of the mean and covariance. The physics are based on the six values in our state vector (in this order, represented as a column vector):
 
-X_t = \begin{bmatrix} x_t \\ \dot{x}_t \\ \ddot{x}_t \\ y_t \\ \dot{y}_t \\ \ddot{y}_t \end{bmatrix}
+![Alt text](/KALMAN/Xt.png?raw=true)
 
 where x and y are the (x,y) position of the enemy agent, \dot{x} is the x component of the agent's velocity, \ddot{x} is the x component of the agent's acceleration, and etc. Note that we use Xt to represent the entire observation at time t.
 
