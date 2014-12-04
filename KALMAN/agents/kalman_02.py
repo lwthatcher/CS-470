@@ -62,8 +62,6 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		print(self.othertanks)
-		
 		make_map = GnuPlot(self, self.sigma.x, self.sigma.y, self.mu_x, self.mu_y, self.rho) 
 		
 		if not self.wroteonce:
