@@ -4,7 +4,7 @@ set pm3d
 set view map
 unset key
 set size square
-set title 'Kalman'
+set title 'Kalman Filter'
 
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 

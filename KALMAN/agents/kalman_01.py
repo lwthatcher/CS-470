@@ -55,6 +55,7 @@ class Agent(object):
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
+		
 		mytanks, othertanks, flags, shots = self.bzrc.get_lots_o_stuff()
 		self.mytanks = mytanks
 		self.othertanks = othertanks
@@ -301,17 +302,10 @@ class GnuPlot():
 	def __init__(self, agent, flags, obstacles, sigmax, sigmay, mu_x, mu_y, rho):
 		self.agent = agent
 		self.bzrc = agent.bzrc
-		self.constants = self.bzrc.get_constants()
 		
 		self.FILENAME = 'plot.gpi'
 		self.WORLDSIZE = 800
-		self.SAMPLES = 50
-		self.VEC_LEN = 0.75 * self.WORLDSIZE / self.SAMPLES
-		
-		self.flags = flags
-		self.obstacles = obstacles
-		self.flags = flags
-		self.obstacles = obstacles
+
 		self.sigma_x = sigmax
 		self.sigma_y = sigmay
 		self.mu_x = mu_x
@@ -355,89 +349,6 @@ class GnuPlot():
 		s += 'mu_y = {}\n'.format(mu_y)
 		s += 'rho = {}\n'.format(rho)
 		return s
-	"""	
-	def generate_field_function(self, scale):
-		
-		tank1 = Tank()
-		tank1.x = 0
-		tank1.y = 150
-		
-		tank2 = Tank()
-		tank2.x = 0
-		tank2.y = -200
-		
-		faketanks = [tank1, tank2]
-		
-		def function(x, y):
-			target = self.agent.get_best_flag(x, y)
-			
-			#get deltas
-			#delta_xG, delta_yG = [0, 0]
-			#magnitude = 1
-			delta_xG, delta_yG, magnitude = self.agent.calculate_objective_delta(x, y, target.x, target.y)
-			#delta_xO, delta_yO = self.agent.calculate_obstacles_delta(x, y)
-			delta_xA, delta_yA = self.agent.calculate_enemies_delta(x, y, faketanks)
-			
-			#combine
-			delta_x = delta_xG + delta_xO + delta_xA
-			delta_y = delta_yG + delta_yO + delta_yA
-			
-			magnitude = math.sqrt(delta_x**2 + delta_y**2)
-			
-			return delta_x*scale*magnitude, delta_y*scale*magnitude
-			
-		return function
-	
-	def gpi_point(self, x, y, vec_x, vec_y):
-		'''Create the centered gpi data point (4-tuple) for a position and
-		vector.  The vectors are expected to be less than 1 in magnitude,
-		and larger values will be scaled down.'''
-		r = (vec_x ** 2 + vec_y ** 2) ** 0.5
-		if r > 1:
-			vec_x /= r
-			vec_y /= r
-		return (x - vec_x * self.VEC_LEN / 2, y - vec_y * self.VEC_LEN / 2,
-				vec_x * self.VEC_LEN, vec_y * self.VEC_LEN)
-				
-	def draw_line(self, p1, p2):
-		'''Return a string to tell Gnuplot to draw a line from point p1 to
-		point p2 in the form of a set command.'''
-		x1, y1 = p1
-		x2, y2 = p2
-		return 'set arrow from %s, %s to %s, %s nohead lt 3\n' % (x1, y1, x2, y2)
-
-	def draw_obstacles(self, obstacles):
-		'''Return a string which tells Gnuplot to draw all of the obstacles.'''
-		s = 'unset arrow\n'
-	
-		for obs in obstacles:
-			last_point = obs[0]
-			for cur_point in obs[1:]:
-				s += self.draw_line(last_point, cur_point)
-				last_point = cur_point
-			s += self.draw_line(last_point, obs[0])
-		return s
-	
-	def plot_field(self, function):
-		'''Return a Gnuplot command to plot a field.'''
-		s = "plot '-' with vectors head\n"
-	
-		separation = self.WORLDSIZE / self.SAMPLES
-		end = self.WORLDSIZE / 2 - separation / 2
-		start = -end
-
-		points = ((x, y) for x in linspace(start, end, self.SAMPLES)
-					for y in linspace(start, end, self.SAMPLES))
-	
-		for x, y in points:
-			f_x, f_y = function(x, y)
-			plotvalues = self.gpi_point(x, y, f_x, f_y)
-			if plotvalues is not None:
-				x1, y1, x2, y2 = plotvalues
-				s += '%s %s %s %s\n' % (x1, y1, x2, y2)
-		s += 'e\n'
-		return s
-	"""
 
 def main():
 	# Process CLI arguments.
@@ -456,11 +367,14 @@ def main():
 	agent = Agent(bzrc)
 
 	prev_time = time.time()
-
+	cur_time = time.time()
 	# Run the agent
 	try:
 		while True:
-			time_diff = time.time() - prev_time
+			cur_time = time.time()
+			time_diff = cur_time - prev_time
+			prev_time = cur_time
+			#time_diff = time.time() - prev_time
 			agent.tick(time_diff)
 	except KeyboardInterrupt:
 		print "Exiting due to keyboard interrupt."
