@@ -2,7 +2,9 @@
 
 This is a group (pairs) lab.
 
-This lab is still under construction. What is here is fine but there will be a little added.
+Use this command for starting our server:
+
+    ./bin/bzrflag --world='maps/empty.bzw' --default-tanks=1 --red-port=50647 --blue-port=37626 --purple-port=42721    --green-port=37964 --default-posnoise=5
 
 <h3>objective</h3>
  
