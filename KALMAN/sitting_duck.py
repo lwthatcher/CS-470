@@ -38,11 +38,6 @@ class Agent(object):
         """Some time has passed; decide what to do next."""
         mytanks, othertanks, flags, shots = self.bzrc.get_lots_o_stuff()
         self.mytanks = mytanks
-        #self.othertanks = othertanks
-        #self.flags = [flag for flag in flags if flag.color != self.constants['team']]
-        #self.shots = shots
-        #self.enemies = [tank for tank in othertanks if tank.color !=
-        #                self.constants['team']]
 
 def main():
     # Process CLI arguments.
