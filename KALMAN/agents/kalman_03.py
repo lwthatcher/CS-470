@@ -42,9 +42,10 @@ class Agent(object):
 		self.MAXTICKS = 100
 		self.sigma_x = 25
 		self.sigma_y = 25
-		self.mu_x = 0
-		self.mu_y = 0
+		#self.mu_x = 0
+		#self.mu_y = 0
 		self.rho = 0.3
+		self.mus = []
 		
 		self.COLORS = ['blue','red','green','purple']
 		self.color_index = 0
@@ -64,23 +65,22 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		print(self.enemies)
-		
-		for tank in self.enemies:
-			pass
-		
-		
-		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho) 
+		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.rho) 
 		
 		if not self.wroteonce:
-			make_map.generateGnuMap()
+			
+			# initialize the estimated positions for all of the enemy tanks
+			for tank in self.enemies:
+				self.mus.append([tank.x,tank.y])
+			make_map.generateGnuMap(self.mus)
 			self.wroteonce = True
 
 		
 		for tank in mytanks:
 			self.kalman(tank)
 		
-
+		#make_map.generateGnuMap(mus)
+		
 		results = self.bzrc.do_commands(self.commands)
 		self.num_ticks = self.num_ticks + 1
 
@@ -325,7 +325,7 @@ class Tank(object):
 
 class GnuPlot():
 	
-	def __init__(self, agent, sigmax, sigmay, mu_x, mu_y, rho):
+	def __init__(self, agent, sigmax, sigmay, rho):
 		self.agent = agent
 		self.bzrc = agent.bzrc
 		
@@ -334,22 +334,27 @@ class GnuPlot():
 
 		self.sigma_x = sigmax
 		self.sigma_y = sigmay
-		self.mu_x = mu_x
-		self.mu_y = mu_y
 		self.rho = rho
 		
 	
-	def generateGnuMap(self):
+	def generateGnuMap(self, mus):
 		outfile = open(self.FILENAME, 'w')
 		minimum = -self.WORLDSIZE / 2
 		maximum = self.WORLDSIZE / 2
 		print >>outfile, self.gnuplot_header(minimum, maximum)
 		print >>outfile, 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
 		print >>outfile, 'set isosamples 100\n'
-		print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
-		print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
-		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
-		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
+		
+		for mu in mus:
+			print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, mu[0], mu[1], self.rho)
+			print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
+			* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
+			- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
+		
+		#print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
+		#print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
+		#* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
+		#- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
 
 		outfile.close()
 	
