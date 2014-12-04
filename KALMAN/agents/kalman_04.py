@@ -30,7 +30,6 @@ class Agent(object):
 		self.BETA = 0.3
 		self.OBS_TOLERANCE = 35.0
 		self.S = 50
-		self.wroteonce = False
 		self.goalradius = 30
 		
 		self.tankradius = 5
@@ -58,6 +57,8 @@ class Agent(object):
 		self.H_t = self.H.getT()
 		self.F = np.matrix([[1, DELTA_T, (DELTA_T**2) / 2, 0, 0, 0], [0, 1, DELTA_T, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, DELTA_T, (DELTA_T**2) / 2], [0, 0, 0, 0, 1, DELTA_T], [0, 0, 0, 0, 0, 1]])
 		self.F_t = self.F.getT()
+		
+		self.make_map = GnuPlot(self, self.SIGMA_X, self.mu_x, self.mu_y, self.rho) 
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -70,20 +71,10 @@ class Agent(object):
 		self.enemies = [tank for tank in othertanks if tank.color !=
 						self.constants['team']]
 		self.obstacles = self.bzrc.get_obstacles()
-		self.commands = []
-		
-		print(self.enemies)
-		
-		for tank in self.enemies:
-			pass
-		
-		
-		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho) 
-		
-		if not self.wroteonce:
-			make_map.generateGnuMap()
-			self.wroteonce = True
+		self.commands = []		
 
+		if self.num_ticks % self.MAXTICKS == 0:
+			self.make_map.generateGnuMap()
 		
 		for tank in mytanks:
 			self.kalman(tank)
@@ -333,15 +324,15 @@ class Tank(object):
 
 class GnuPlot():
 	
-	def __init__(self, agent, sigmax, sigmay, mu_x, mu_y, rho):
+	def __init__(self, agent, SIGMA_X, mu_x, mu_y, rho):
 		self.agent = agent
 		self.bzrc = agent.bzrc
 		
 		self.FILENAME = 'plot.gpi'
 		self.WORLDSIZE = 800
 
-		self.sigma_x = sigmax
-		self.sigma_y = sigmay
+		self.sigma_x = SIGMA_X[0,0]
+		self.sigma_y = SIGMA_X[1,1]
 		self.mu_x = mu_x
 		self.mu_y = mu_y
 		self.rho = rho
