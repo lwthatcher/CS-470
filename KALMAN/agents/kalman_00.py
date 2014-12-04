@@ -63,7 +63,7 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		#make_map = GnuPlot(self, self.flags, self.obstacles) 
+		make_map = GnuPlot(self, self.flags, self.obstacles) 
 		
 		'''if not self.wroteonce:
 			make_map.generateGnuMap()
@@ -78,7 +78,7 @@ class Agent(object):
 		self.num_ticks = self.num_ticks + 1
 
 	def kalman(self, tank):
-		target = self.get_target(tank)
+		target = self.get_target_loc(tank)
 		
 		delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target.x, target.y)
 		#calculate angle
@@ -89,9 +89,13 @@ class Agent(object):
 		self.commands.append(command)
 
 
-	def get_target(self, tank):
-		initial_target = self.get_best_flag(tank.x, tank.y)
-		return initial_target
+	def get_target_loc(self, tank):
+		target = None
+		for flag in self.flags:
+			if flag.color == 'red':
+				target = flag
+		
+		return target
 		
 
 	def get_best_flag(self, x, y):

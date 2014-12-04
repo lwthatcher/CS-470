@@ -4,7 +4,8 @@ This is a group (pairs) lab.
 
 Use this command for starting our server:
 
-    ./bin/bzrflag --world='maps/empty.bzw' --default-tanks=1 --red-port=50003 --blue-port=50000 --purple-port=50001 --green-port=50002 --default-posnoise=5
+    ./bin/bzrflag --world='maps/empty.bzw' --default-tanks=1 --red-port=50003 --blue-port=50000 --purple-port=50001 --green-port=50002 --default-posnoise=5 --respawn-time=999999999999
+
 
 <h3>objective</h3>
  
