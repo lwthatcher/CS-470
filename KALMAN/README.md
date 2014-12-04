@@ -48,6 +48,8 @@ Initially, your clay pigeons will be at some unknown position on the playing fie
 
 X_t = \begin{bmatrix} x_t \\ \dot{x}_t \\ \ddot{x}_t \\ y_t \\ \dot{y}_t \\ \ddot{y}_t \end{bmatrix}
 
+<img src="/Xt.png" />
+
 where x and y are the (x,y) position of the enemy agent, \dot{x} is the x component of the agent's velocity, \ddot{x} is the x component of the agent's acceleration, and etc. Note that we use Xt to represent the entire observation at time t.
 
  

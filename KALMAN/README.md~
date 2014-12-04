@@ -55,7 +55,7 @@ where x and y are the (x,y) position of the enemy agent, \dot{x} is the x compon
 
 Given this state vector, the Kalman Filter will produce a mean estimate for this vector μ and a covariance matrix for this vector Σ. So, your initial estimates of the mean and covariance could look like these:
 
-\mu_0 = \begin{bmatrix} 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \end{bmatrix}
+<b>μ</b>0 = <table><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td><tr><td> 0 </tr></td></table>
 
 which means that you think the agent begins at the origin with no velocity and no acceleration, and
 
