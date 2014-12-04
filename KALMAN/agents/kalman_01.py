@@ -50,6 +50,8 @@ class Agent(object):
 		
 		self.num_ticks = 0
 		self.MAXTICKS = 100
+		self.sigma_x = 25
+		self.sigma_y = 25
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -63,7 +65,7 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		make_map = GnuPlot(self, self.flags, self.obstacles, 25, 25, -100, 100, 0.3) 
+		make_map = GnuPlot(self, self.flags, self.obstacles, self.sigma_x, self.sigma_y, -100, 100, 0.3) 
 		
 		if not self.wroteonce:
 			make_map.generateGnuMap()
@@ -296,7 +298,7 @@ class Tank(object):
 
 class GnuPlot():
 	
-	def __init__(self, agent, flags, obstacles):
+	def __init__(self, agent, flags, obstacles, sigmax, sigmay, mu_x, mu_y, rho):
 		self.agent = agent
 		self.bzrc = agent.bzrc
 		self.constants = self.bzrc.get_constants()
@@ -324,16 +326,36 @@ class GnuPlot():
 		print >>outfile, self.gnuplot_header(minimum, maximum)
 		print >>outfile, 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
 		print >>outfile, 'set isosamples 100\n'
-		print >>outfile, 'sigma_x = {}\n'.format(self.sigma_x)
-		print >>outfile, 'sigma_y = {}\n'.format(self.sigma_y)
-		print >>outfile, 'mu_x = {}\n'.format(self.mu_x)
-		print >>outfile, 'mu_y = {}\n'.format(self.mu_y)
-		print >>outfile, 'rho = {}\n'.format(self.rho)
+		print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
 		print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
         * exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
         - 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d'
 		outfile.close()
-		
+	
+	def gnuplot_header(self, minimum, maximum):
+		'''Return a string that has all of the gnuplot sets and unsets.'''
+		s = ''
+		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
+		s += 'set yrange [%s: %s]\n' % (minimum, maximum)
+		s += 'set pm3d\n'
+		s += 'set view map\n'
+		# The key is just clutter.  Get rid of it:
+		s += 'unset key\n'
+		# Make sure the figure is square since the world is square:
+		s += 'set size square\n'
+		# Add a pretty title (optional):
+		s += "set title 'Kalman Filter'\n"
+		return s
+	
+	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):
+		s = ''
+		s += 'sigma_x = {}\n'.format(sigma_x)
+		s += 'sigma_y = {}\n'.format(sigma_y)
+		s += 'mu_x = {}\n'.format(mu_x)
+		s += 'mu_y = {}\n'.format(mu_y)
+		s += 'rho = {}\n'.format(rho)
+		return s
+	"""	
 	def generate_field_function(self, scale):
 		
 		tank1 = Tank()
@@ -376,20 +398,7 @@ class GnuPlot():
 			vec_y /= r
 		return (x - vec_x * self.VEC_LEN / 2, y - vec_y * self.VEC_LEN / 2,
 				vec_x * self.VEC_LEN, vec_y * self.VEC_LEN)
-	
-	def gnuplot_header(self, minimum, maximum):
-		'''Return a string that has all of the gnuplot sets and unsets.'''
-		s = ''
-		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
-		s += 'set yrange [%s: %s]\n' % (minimum, maximum)
-		# The key is just clutter.  Get rid of it:
-		s += 'unset key\n'
-		# Make sure the figure is square since the world is square:
-		s += 'set size square\n'
-		# Add a pretty title (optional):
-		#s += "set title 'Potential Fields'\n"
-		return s
-
+				
 	def draw_line(self, p1, p2):
 		'''Return a string to tell Gnuplot to draw a line from point p1 to
 		point p2 in the form of a set command.'''
@@ -408,7 +417,7 @@ class GnuPlot():
 				last_point = cur_point
 			s += self.draw_line(last_point, obs[0])
 		return s
-
+	
 	def plot_field(self, function):
 		'''Return a Gnuplot command to plot a field.'''
 		s = "plot '-' with vectors head\n"
@@ -428,6 +437,7 @@ class GnuPlot():
 				s += '%s %s %s %s\n' % (x1, y1, x2, y2)
 		s += 'e\n'
 		return s
+	"""
 
 def main():
 	# Process CLI arguments.
