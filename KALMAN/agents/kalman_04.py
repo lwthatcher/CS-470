@@ -14,10 +14,10 @@ import sys
 import math
 import time
 import random
-from numpy import linspace
-import numpy as np
 
 from bzrc import BZRC, Command
+from numpy import linspace
+import numpy as np
 
 class Agent(object):
 	"""Class handles all command and control logic for a teams tanks."""
@@ -40,7 +40,7 @@ class Agent(object):
 		self.aimtolerance = math.pi/20
 		
 		self.num_ticks = 0
-		self.MAXTICKS = 200
+		self.MAXTICKS = 100
 		self.sigma_x = 25
 		self.sigma_y = 25
 		self.mu_x = 0
@@ -58,13 +58,6 @@ class Agent(object):
 		self.H_t = self.H.getT()
 		self.F = np.matrix([[1, DELTA_T, (DELTA_T**2) / 2, 0, 0, 0], [0, 1, DELTA_T, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, DELTA_T, (DELTA_T**2) / 2], [0, 0, 0, 0, 1, DELTA_T], [0, 0, 0, 0, 0, 1]])
 		self.F_t = self.F.getT()
-		
-		print 'Sigma x:\n',self.SIGMA_X
-		print 'Sigma z:\n',self.SIGMA_Z
-		print 'H:\n',self.H
-		print 'H Transpose:\n',self.H_t
-		print 'F:\n',self.F
-		print 'F Transpose:\n',self.F_t
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -79,9 +72,15 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
+		print(self.enemies)
+		
+		for tank in self.enemies:
+			pass
+		
+		
 		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho) 
 		
-		if self.num_ticks % self.MAXTICKS == 0:
+		if not self.wroteonce:
 			make_map.generateGnuMap()
 			self.wroteonce = True
 
@@ -116,8 +115,6 @@ class Agent(object):
 			if flag.color == color:
 				target = flag
 		
-		self.mu_x = target.x
-		self.mu_y = target.y
 		return target
 		
 	def get_target_color(self):
@@ -359,8 +356,9 @@ class GnuPlot():
 		print >>outfile, 'set isosamples 100\n'
 		print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
 		print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
-        * exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
-        - 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d'
+		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
+		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
+
 		outfile.close()
 	
 	def gnuplot_header(self, minimum, maximum):
