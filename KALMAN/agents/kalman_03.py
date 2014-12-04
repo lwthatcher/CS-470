@@ -347,7 +347,7 @@ class GnuPlot():
 		print >>outfile, 'set isosamples 100\n'
 		
 		for mu in mus:
-			print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, mu[0], mu[1], self.rho)
+			print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, mus.index(mu), mu[0], mu[1], self.rho)
 			print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
 			* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
 			- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
@@ -374,7 +374,7 @@ class GnuPlot():
 		s += "set title 'Kalman Filter'\n"
 		return s
 	
-	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):
+	def gnuplot_variables(self, sigma_x, sigma_y, index, mu_x, mu_y, rho):
 		s = ''
 		s += 'sigma_x = {}\n'.format(sigma_x)
 		s += 'sigma_y = {}\n'.format(sigma_y)
