@@ -1,16 +1,6 @@
 #!/usr/bin/python -tt
 
-# An incredibly simple agent.  All we do is find the closest enemy tank, drive
-# towards it, and shoot.  Note that if friendly fire is allowed, you will very
-# often kill your own tanks with this code.
-
 #################################################################
-# NOTE TO STUDENTS
-# This is a starting point for you.  You will need to greatly
-# modify this code if you want to do anything useful.  But this
-# should help you to know how to interact with BZRC in order to
-# get the information you need.
-#
 # After starting the bzrflag server, this is one way to start
 # this code:
 # python agent0.py [hostname] [port]
@@ -52,6 +42,9 @@ class Agent(object):
 		self.MAXTICKS = 100
 		self.sigma_x = 25
 		self.sigma_y = 25
+		self.mu_x = 0
+		self.mu_y = 0
+		self.rho = 0.3
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -66,7 +59,7 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		make_map = GnuPlot(self, self.flags, self.obstacles, self.sigma_x, self.sigma_y, -100, 100, 0.3) 
+		make_map = GnuPlot(self, self.sigma.x, self.sigma.y, self.mu_x, self.mu_y, self.rho) 
 		
 		if not self.wroteonce:
 			make_map.generateGnuMap()
@@ -299,7 +292,7 @@ class Tank(object):
 
 class GnuPlot():
 	
-	def __init__(self, agent, flags, obstacles, sigmax, sigmay, mu_x, mu_y, rho):
+	def __init__(self, agent, sigmax, sigmay, mu_x, mu_y, rho):
 		self.agent = agent
 		self.bzrc = agent.bzrc
 		

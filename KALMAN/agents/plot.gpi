@@ -12,8 +12,8 @@ set isosamples 100
 
 sigma_x = 25
 sigma_y = 25
-mu_x = -100
-mu_y = 100
+mu_x = 0
+mu_y = 0
 rho = 0.3
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )         * exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2         - 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
