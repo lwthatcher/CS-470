@@ -14,9 +14,10 @@ import sys
 import math
 import time
 import random
+from numpy import linspace
+import numpy as np
 
 from bzrc import BZRC, Command
-from numpy import linspace
 
 class Agent(object):
 	"""Class handles all command and control logic for a teams tanks."""
@@ -39,7 +40,7 @@ class Agent(object):
 		self.aimtolerance = math.pi/20
 		
 		self.num_ticks = 0
-		self.MAXTICKS = 100
+		self.MAXTICKS = 200
 		self.sigma_x = 25
 		self.sigma_y = 25
 		self.mu_x = 0
@@ -48,6 +49,14 @@ class Agent(object):
 		
 		self.COLORS = ['blue','red','green','purple']
 		self.color_index = 0
+		
+		self.DELTA_T = 0.005
+		self.SIGMA_X = np.matrix('25 0;0 25')
+		self.SIGMA_Z = np.matrix([[.1, 0, 0, 0, 0, 0],[0, .2, 0, 0, 0, 0],[0, 0, 90, 0, 0, 0],[0, 0, 0, .1, 0, 0],[0, 0, 0, 0, .2, 0],[0, 0, 0, 0, 0, 90]])
+		
+		
+		print 'Sigma x:',SIGMA_X
+		print 'Sigma z:',SIGMA_Z
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -64,7 +73,7 @@ class Agent(object):
 		
 		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho) 
 		
-		if not self.wroteonce:
+		if self.num_ticks % self.MAXTICKS == 0:
 			make_map.generateGnuMap()
 			self.wroteonce = True
 
@@ -99,6 +108,8 @@ class Agent(object):
 			if flag.color == color:
 				target = flag
 		
+		self.mu_x = target.x
+		self.mu_y = target.y
 		return target
 		
 	def get_target_color(self):
