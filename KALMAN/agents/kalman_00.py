@@ -47,6 +47,9 @@ class Agent(object):
 		self.avoidBETA = 0.1
 		
 		self.aimtolerance = math.pi/20
+		
+		self.num_ticks = 0
+		self.MAXTICKS = 100
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -60,47 +63,36 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		make_map = GnuPlot(self, self.flags, self.obstacles) 
+		#make_map = GnuPlot(self, self.flags, self.obstacles) 
 		
-		if not self.wroteonce:
+		'''if not self.wroteonce:
 			make_map.generateGnuMap()
-			self.wroteonce = True
-		
-		
+			self.wroteonce = True'''
+
 		
 		for tank in mytanks:
 			self.kalman(tank)
 		
-		'''for tank in mytanks:
-			if tank.flag == '-':
-				self.goto_flags(tank)
-			else:
-				base_x, base_y = self.get_base_center(self.get_my_base())
-				self.move_to_position(tank, base_x, base_y)'''
 
 		results = self.bzrc.do_commands(self.commands)
+		self.num_ticks = self.num_ticks + 1
 
 	def kalman(self, tank):
-		command = Command(tank.index, 0, 0, True)
+		target = self.get_target(tank)
+		
+		delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target.x, target.y)
+		#calculate angle
+		turn_angle = math.atan2(delta_y, delta_x)
+		relative_angle = self.normalize_angle(turn_angle - tank.angle)
+		
+		command = Command(tank.index, 0, 2 * relative_angle, True)
 		self.commands.append(command)
 
-	def get_my_base(self):
-		mybases = [base for base in self.bzrc.get_bases() if base.color == self.constants['team']]
-		mybase = mybases[0]
-		return mybase
-	
-	def get_base_center(self, base):
-		center_x = ((base.corner1_x + base.corner2_x + base.corner3_x + base.corner4_x) / 4)
-		center_y = ((base.corner1_y + base.corner2_y + base.corner3_y + base.corner4_y) / 4)
-		return center_x, center_y
 
-	def goto_flags(self, tank):
-		best_flag = self.get_best_flag(tank.x, tank.y)
-		if best_flag is None:
-			command = Command(tank.index, 0, 0, False)
-			self.commands.append(command)
-		else:
-			self.move_to_position(tank, best_flag.x, best_flag.y)
+	def get_target(self, tank):
+		initial_target = self.get_best_flag(tank.x, tank.y)
+		return initial_target
+		
 
 	def get_best_flag(self, x, y):
 		best_flag = None
@@ -178,34 +170,6 @@ class Agent(object):
 			
 		return delta_xG, delta_yG, magnitude
 
-	def calculate_obstacles_delta(self, x, y):
-		delta_xO = 0
-		delta_yO = 0
-		
-		for obs in self.obstacles:
-			repel_xO, repel_yO = self.get_obstacle_force(obs, x, y)
-			delta_xO += repel_xO
-			delta_yO += repel_yO
-		
-		sqnorm = math.sqrt(delta_xO**2 + delta_yO**2)
-			
-		if sqnorm == 0:
-			delta_xO = 0
-			delta_yO = 0
-		else:
-			delta_xO = delta_xO / sqnorm
-			delta_yO = delta_yO / sqnorm
-		
-		'''if delta_xG != 0 or delta_yG != 0:
-			print "delta_xO: ", delta_xO
-			print "delta_yO: ", delta_yO'''
-			
-		return delta_xO, delta_yO
-
-	def calculate_random_delta(self):
-		dx = random.uniform(-.01, .01)
-		dy = random.uniform(-.01, .01)
-		return dx, dy
 		
 	def should_fire(self, tank):
 		for enemy in self.enemies:
@@ -371,7 +335,7 @@ class GnuPlot():
 			#delta_xG, delta_yG = [0, 0]
 			#magnitude = 1
 			delta_xG, delta_yG, magnitude = self.agent.calculate_objective_delta(x, y, target.x, target.y)
-			delta_xO, delta_yO = self.agent.calculate_obstacles_delta(x, y)
+			#delta_xO, delta_yO = self.agent.calculate_obstacles_delta(x, y)
 			delta_xA, delta_yA = self.agent.calculate_enemies_delta(x, y, faketanks)
 			
 			#combine
