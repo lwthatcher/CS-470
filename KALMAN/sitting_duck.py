@@ -55,12 +55,12 @@ class Agent(object):
         if not self.wrotegnufile:
            self.generateGnuMap()
            self.wrotegnufile = True 
-
+		"""
         for tank in mytanks:
             self.goto_flags(tank)
 
         results = self.bzrc.do_commands(self.commands)
-
+		"""
     def goto_flags(self, tank):
         best_flag = None
         best_dist = 2 * float(self.constants['worldsize'])
