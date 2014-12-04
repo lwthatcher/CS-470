@@ -50,6 +50,9 @@ class Agent(object):
 		
 		self.num_ticks = 0
 		self.MAXTICKS = 100
+		
+		self.COLORS = ['blue','red','green','purple']
+		self.color_index = 0
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -58,8 +61,7 @@ class Agent(object):
 		self.othertanks = othertanks
 		self.flags = [flag for flag in flags if flag.color != self.constants['team']]
 		self.shots = shots
-		self.enemies = [tank for tank in othertanks if tank.color !=
-						self.constants['team']]
+		self.enemies = [tank for tank in othertanks if tank.color != self.constants['team']]
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
@@ -79,20 +81,43 @@ class Agent(object):
 
 	def kalman(self, tank):
 		target = self.get_target_loc(tank)
-		
-		delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target.x, target.y)
-		#calculate angle
-		turn_angle = math.atan2(delta_y, delta_x)
-		relative_angle = self.normalize_angle(turn_angle - tank.angle)
-		
-		command = Command(tank.index, 0, 2 * relative_angle, True)
-		self.commands.append(command)
+		if target != None:
+			
+			#calculate angle
+			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target.x, target.y)
+			turn_angle = math.atan2(delta_y, delta_x)
+			relative_angle = self.normalize_angle(turn_angle - tank.angle)
+			
+			command = Command(tank.index, 0, 2 * relative_angle, True)
+			self.commands.append(command)
 
+	def get_target_color(self):
+		if self.color_index == self.constants['team']:
+			self.color_index = self.color_index + 1
+		
+		if self.color_index > 3:
+			return None
+		
+		anyliving = False
+		for tank in self.enemies:
+			if tank.color == self.COLORS[self.color_index] and tank.status == 'alive':
+				anyliving = True
+		
+		if anyliving:
+			return self.COLORS[self.color_index]
+		else:
+			self.color_index = self.color_index + 1
+			return self.get_target_color()
+		
 
 	def get_target_loc(self, tank):
 		target = None
+		color = self.get_target_color()
+		if color == None:
+			return None
+		
 		for flag in self.flags:
-			if flag.color == 'red':
+			if flag.color == color:
 				target = flag
 		
 		return target
