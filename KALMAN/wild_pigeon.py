@@ -49,7 +49,7 @@ class Agent(object):
 		
 		self.aimtolerance = math.pi/20
 		self.num_ticks = 0
-		self.MAXTICKS = 10
+		self.MAXTICKS = 100
 		
 
 	def tick(self, time_diff):
@@ -75,7 +75,8 @@ class Agent(object):
 		if self.num_ticks % self.MAXTICKS == 0:
 			print("new velocity")
 			for tank in mytanks:
-				magnitude = random.random()
+				# make sure the velocity is between 0.5 and 1
+				magnitude = random.random() * 0.5 + 0.5
 				relative_angle = 0.5
 				command = Command(tank.index, magnitude, 2 * relative_angle, False)
 				self.commands.append(command)
