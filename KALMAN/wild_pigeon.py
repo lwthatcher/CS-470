@@ -24,6 +24,7 @@ import sys
 import math
 import time
 import random
+import numpy
 
 from bzrc import BZRC, Command
 from numpy import linspace
@@ -47,6 +48,9 @@ class Agent(object):
 		self.avoidBETA = 0.1
 		
 		self.aimtolerance = math.pi/20
+		self.num_ticks = 0
+		self.MAXTICKS = 10
+		
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -59,21 +63,25 @@ class Agent(object):
 						self.constants['team']]
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
-		
+		self.tank_velocities = numpy.zeros(len(mytanks))
+		"""
 		make_map = GnuPlot(self, self.flags, self.obstacles) 
 		
 		if not self.wroteonce:
 			make_map.generateGnuMap()
 			self.wroteonce = True
+		"""
 		
-		for tank in mytanks:
-			if tank.flag == '-':
-				self.goto_flags(tank)
-			else:
-				base_x, base_y = self.get_base_center(self.get_my_base())
-				self.move_to_position(tank, base_x, base_y)
-
-		results = self.bzrc.do_commands(self.commands)
+		if self.num_ticks % self.MAXTICKS == 0:
+			print("new velocity")
+			for tank in mytanks:
+				magnitude = random.random()
+				relative_angle = 0.5
+				command = Command(tank.index, magnitude, 2 * relative_angle, False)
+				self.commands.append(command)
+			results = self.bzrc.do_commands(self.commands)
+		
+		self.num_ticks = self.num_ticks + 1
 
 
 	def get_my_base(self):
@@ -93,7 +101,7 @@ class Agent(object):
 			self.commands.append(command)
 		else:
 			self.move_to_position(tank, best_flag.x, best_flag.y)
-
+	"""
 	def get_best_flag(self, x, y):
 		best_flag = None
 		best_dist = 2 * float(self.constants['worldsize'])
@@ -103,7 +111,8 @@ class Agent(object):
 				best_dist = dist
 				best_flag = flag
 		return best_flag
-		
+	"""
+	"""	
 	def avoid_target(self, my_x, my_y, target_x, target_y):
 		goal_dist = math.sqrt((target_x - my_x)**2 + (target_y - my_y)**2)
 		target_angle = math.atan2(target_y - my_y, target_x - my_x)
@@ -124,7 +133,8 @@ class Agent(object):
 			dx = 0
 			dy = 0
 		return dx, dy
-		
+	"""
+	"""	
 	def calculate_enemies_delta(self, my_x, my_y, enemies):
 		delta_x = 0
 		delta_y = 0
@@ -144,7 +154,8 @@ class Agent(object):
 			delta_y = delta_y / sqnorm
 		
 		return delta_x, delta_y
-
+	"""
+	"""
 	def calculate_objective_delta(self, my_x, my_y, target_x, target_y):
 		goal_dist = math.sqrt((target_x - my_x)**2 + (target_y - my_y)**2)
 		target_angle = math.atan2(target_y - my_y, target_x - my_x)
@@ -169,7 +180,8 @@ class Agent(object):
 			delta_yG = delta_yG / sqnorm
 			
 		return delta_xG, delta_yG, magnitude
-
+	"""
+	"""
 	def calculate_obstacles_delta(self, x, y):
 		delta_xO = 0
 		delta_yO = 0
@@ -193,12 +205,14 @@ class Agent(object):
 			print "delta_yO: ", delta_yO'''
 			
 		return delta_xO, delta_yO
-
+	"""
+	"""
 	def calculate_random_delta(self):
 		dx = random.uniform(-.01, .01)
 		dy = random.uniform(-.01, .01)
 		return dx, dy
-		
+	"""
+	"""	
 	def should_fire(self, tank):
 		for enemy in self.enemies:
 			target_angle = math.atan2(enemy.y - tank.y, enemy.x - tank.x)
@@ -206,7 +220,7 @@ class Agent(object):
 				return True
 				
 		return False
-
+	"""
 	def move_to_position(self, tank, target_x, target_y):
 		"""Set command to move to given coordinates."""
 		
