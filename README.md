@@ -1,9 +1,22 @@
 CS-470
 ======
+<h1>Setting Up:</h1>
+<h2>Running the game</h2>
+The server can be run with the command: (assuming you are in the bzrflag dir)
 
-Fall 2014
+    [you@yourmachine bzrflag]$ ./bin/bzrflag
 
-What to Turn In
+To get a list of the command line options you can use, run:
+
+    [you@yourmachine bzrflag]$ ./bin/bzrflag -h
+    
+<h2>Running your agent</h2>
+To run your agent, run (from a new window) using:
+
+    [you@yourmachine bzrflag]$ python bzagents/agent0.py localhost [port]
+
+<h1>Kalman Lab:</h1>
+<h2>What to Turn In</h2>
 
 To pass off this lab, you will:
 
