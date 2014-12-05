@@ -41,8 +41,7 @@ class Agent(object):
 		self.num_ticks = 0
 		self.MAXTICKS = 3000
 		self.UPTICKS = 20
-		#self.mu_x = 0
-		#self.mu_y = 0
+
 		self.rho = 0.3
 		
 		self.COLORS = ['blue','red','green','purple']
@@ -59,9 +58,17 @@ class Agent(object):
 		self.H_t = self.H.getT()
 		self.F = np.matrix([[1, DELTA_T, (DELTA_T**2) / 2, 0, 0, 0], [0, 1, DELTA_T, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, DELTA_T, (DELTA_T**2) / 2], [0, 0, 0, 0, 1, DELTA_T], [0, 0, 0, 0, 0, 1]])
 		self.F_t = self.F.getT()
-		self.mu = np.matrix('0;0')
+		self.mu = np.matrix('1;0;0;1;0;0')
 		
-		self.make_map = GnuPlot(self, self.SIGMA_X, self.mu_x, self.mu_y, self.rho) 
+		mu_x = self.mu[0,0]
+		mu_y = self.mu[3,0]
+		
+		#print "Pk:\n", self.get_Pk()
+		#print 'K:\n', self.get_K(self.get_Pk())
+		#print 'MUx: ', mu_x
+		#print 'MUy: ', mu_y
+		
+		self.make_map = GnuPlot(self, self.SIGMA_X, mu_x, mu_y, self.rho) 
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -92,11 +99,11 @@ class Agent(object):
 
 	def kalman(self, tank):
 		target = self.get_target_loc(tank)
-		X = np.matrix([target.x; target.y])
+		X = np.matrix([target.x, target.y])
 		if target != None:
 			
-			P_k = self.F * self.SIGMA_T * self.F_t + self.SIGMA_Z
-			K = P_k * self.H_t * np.linalg.inv(self.H * P_k * self.H_t + self.SIGMA_X)
+			P_k = self.get_Pk()
+			K = self.get_K(P_k)
 			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)
 			self.SIGMA_T = (self.I - K * self.H) * P_k
 			
@@ -108,6 +115,13 @@ class Agent(object):
 			command = Command(tank.index, 0, 2 * relative_angle, True)
 			self.commands.append(command)
 
+	def get_Pk(self):
+		P_k = self.F * self.SIGMA_T * self.F_t + self.SIGMA_Z
+		return P_k
+		
+	def get_K(self, P_k):
+		K = P_k * self.H_t * np.linalg.inv(self.H * P_k * self.H_t + self.SIGMA_X)
+		return K
 
 	def get_target_loc(self, tank):
 		target = None
