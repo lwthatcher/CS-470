@@ -41,8 +41,6 @@ class Agent(object):
 		self.num_ticks = 0
 		self.MAXTICKS = 3000
 		self.UPTICKS = 20
-		self.sigma_x = 25
-		self.sigma_y = 25
 		self.mu_x = 0
 		self.mu_y = 0
 		self.rho = 0.3
@@ -53,7 +51,9 @@ class Agent(object):
 		DELTA_T = 0.005
 		self.DELTA_T = DELTA_T
 		self.SIGMA_X = np.matrix('25 0;0 25')
-		self.SIGMA_Z = np.matrix([[.1, 0, 0, 0, 0, 0],[0, .2, 0, 0, 0, 0],[0, 0, 90, 0, 0, 0],[0, 0, 0, .1, 0, 0],[0, 0, 0, 0, .2, 0],[0, 0, 0, 0, 0, 90]])
+		self.SIGMA_Z = np.matrix([[0.1, 0, 0, 0, 0, 0],[0, 0.2, 0, 0, 0, 0],[0, 0, 90, 0, 0, 0],[0, 0, 0, 0.1, 0, 0],[0, 0, 0, 0, 0.2, 0],[0, 0, 0, 0, 0, 90]])
+		self.SIGMA_0 = np.matrix([[90, 0, 0, 0, 0, 0],[0, 0.1, 0, 0, 0, 0],[0, 0, 0.1, 0, 0, 0],[0, 0, 0, 90, 0, 0],[0, 0, 0, 0, 0.1, 0],[0, 0, 0, 0, 0, 0.1]])
+		self.SIGM_T = self.SIGMA_0
 		self.H = np.matrix('1 0 0 0 0 0;0 0 0 1 0 0')
 		self.H_t = self.H.getT()
 		self.F = np.matrix([[1, DELTA_T, (DELTA_T**2) / 2, 0, 0, 0], [0, 1, DELTA_T, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, DELTA_T, (DELTA_T**2) / 2], [0, 0, 0, 0, 1, DELTA_T], [0, 0, 0, 0, 0, 1]])
@@ -89,11 +89,15 @@ class Agent(object):
 		self.num_ticks = self.num_ticks + 1
 
 	def kalman(self, tank):
-		target = self.get_target_loc(tank)
-		if target != None:
+		sensor_loc = self.get_target_loc(tank)
+		#target = self.get_target_loc(tank)
+		if sensor_loc != None:
+			
+			P_k = self.F * self.SIGMA_T * self.F_t + self.SIGMA_Z
+			K = P_k * self.H_t * (self.H * P_k * self.H_t + self.SIGMA_X)
 			
 			#calculate angle
-			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target.x, target.y)
+			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, sensor_loc.x, sensor_loc.y)
 			turn_angle = math.atan2(delta_y, delta_x)
 			relative_angle = self.normalize_angle(turn_angle - tank.angle)
 			
