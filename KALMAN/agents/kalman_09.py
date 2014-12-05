@@ -213,9 +213,6 @@ class Tank(object):
 class GnuPlot():
 	
 	def __init__(self, agent, SIGMA_X, mu, rho):
-		self.agent = agent
-		self.bzrc = agent.bzrc
-		
 		self.FILENAME = 'plot.gpi'
 		self.WORLDSIZE = 800
 
