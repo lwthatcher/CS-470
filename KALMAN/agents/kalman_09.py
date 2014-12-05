@@ -101,8 +101,6 @@ class Agent(object):
 			
 			mu_x = self.mu[0,0]
 			mu_y = self.mu[3,0]
-			
-			print(self.mu)
 
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, mu_x, mu_y)
