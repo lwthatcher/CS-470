@@ -27,16 +27,16 @@ class Agent(object):
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
 		self.ALPHA = 0.01
-		self.BETA = 0.3
-		self.OBS_TOLERANCE = 35.0
-		self.S = 50
+		#self.BETA = 0.3
+		#self.OBS_TOLERANCE = 35.0
+		#self.S = 50
 		self.goalradius = 30
 		
-		self.tankradius = 5
-		self.avoidradius = 50
-		self.avoidBETA = 0.1
+		#self.tankradius = 5
+		#self.avoidradius = 50
+		#self.avoidBETA = 0.1
 		
-		self.aimtolerance = math.pi/20
+		#self.aimtolerance = math.pi/20
 		
 		self.num_ticks = 0
 		self.MAXTICKS = 3000
@@ -101,6 +101,8 @@ class Agent(object):
 			
 			mu_x = self.mu[0,0]
 			mu_y = self.mu[3,0]
+			
+			print(self.mu)
 
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, mu_x, mu_y)
