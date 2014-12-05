@@ -29,14 +29,15 @@ class Agent(object):
 		self.ALPHA = 0.01
 		self.goalradius = 30
 		
-		self.num_ticks = 0
-		self.MAXTICKS = 3000
+		self.num_ticks = 1
+		self.MAXTICKS = 5000
 		self.UPTICKS = 20
 
 		self.rho = 0.3
 		
 		self.COLORS = ['blue','red','green','purple']
 		self.color_index = 0
+		self.color_changed = True
 		
 		DELTA_T = 0.005
 		self.DELTA_T = DELTA_T
@@ -74,17 +75,18 @@ class Agent(object):
 			self.make_map.update_mu(self.mu_x, self.mu_y)
 			self.make_map.add_animation()
 		
-		if self.num_ticks % self.MAXTICKS == 0:			
+		if self.num_ticks % self.MAXTICKS == 0:	
+			print "printing map"		
 			self.make_map.generateGnuMap()		
 
 		results = self.bzrc.do_commands(self.commands)
 		self.num_ticks = self.num_ticks + 1
 
 	def kalman(self, tank):
-		target = self.get_target_loc(tank)
-		X = np.matrix([[target.x],[target.y]])
+		target = self.get_target_loc()
+		
 		if target != None:
-			
+			X = np.matrix([[target.x],[target.y]])
 			P_k = self.get_Pk()
 			K = self.get_K(P_k)
 			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)		
@@ -100,6 +102,8 @@ class Agent(object):
 			
 			command = Command(tank.index, 0, 2 * relative_angle, True)
 			self.commands.append(command)
+		else:
+			self.victory_lap(tank)
 
 	def get_Pk(self):
 		P_k = self.F * self.SIGMA_T * self.F_t + self.SIGMA_Z
@@ -109,15 +113,21 @@ class Agent(object):
 		K = P_k * self.H_t * np.linalg.inv(self.H * P_k * self.H_t + self.SIGMA_X)
 		return K
 
-	def get_target_loc(self, tank):
+	def get_target_loc(self):
 		target = None
-		color = self.get_target_color()
+		color, tank = self.get_target_color()
 		if color == None:
 			return None
 		
-		for flag in self.flags:
-			if flag.color == color:
-				target = flag
+		if self.color_changed:
+			#set flag as target (reset sigma)
+			for flag in self.flags:
+				if flag.color == color:
+					target = flag
+			self.color_changed = False
+		else:
+			#set enemy tank as target
+			target = tank
 		
 		self.mu_x = target.x
 		self.mu_y = target.y
@@ -126,19 +136,23 @@ class Agent(object):
 	def get_target_color(self):
 		if self.color_index == self.constants['team']:
 			self.color_index = self.color_index + 1
+			self.color_changed = True
 		
 		if self.color_index > 3:
-			return None
+			return None, None
 		
 		anyliving = False
+		TargetTank = None
 		for tank in self.enemies:
 			if tank.color == self.COLORS[self.color_index] and tank.status == 'alive':
 				anyliving = True
+				TargetTank = tank
 		
 		if anyliving:
-			return self.COLORS[self.color_index]
+			return self.COLORS[self.color_index], TargetTank
 		else:
 			self.color_index = self.color_index + 1
+			self.color_changed = True
 			return self.get_target_color()
 
 	def get_best_flag(self, x, y):
@@ -171,6 +185,10 @@ class Agent(object):
 			delta_y = delta_y / sqnorm
 		
 		return delta_x, delta_y
+
+	def victory_lap(self, tank):
+		relative_angle = 0.5
+		command = Command(tank.index, 1, 2 * relative_angle, True)
 
 	def calculate_objective_delta(self, my_x, my_y, target_x, target_y):
 		goal_dist = math.sqrt((target_x - my_x)**2 + (target_y - my_y)**2)
