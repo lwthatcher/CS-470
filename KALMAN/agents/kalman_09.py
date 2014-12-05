@@ -92,27 +92,16 @@ class Agent(object):
 	def kalman(self, tank):
 		target = self.get_target_loc(tank)
 		X = np.matrix([[target.x],[target.y]])
-		print("X:", X)
 		if target != None:
 			
 			P_k = self.get_Pk()
-			print("P_k:", P_k)
 			K = self.get_K(P_k)
-			print("K:", K)
-			# _x_ = 6x6 * 6x1 + 6x2 * (2x1 - 2x6 * 6x6 * 6x1)
-			# _x_ = 6x6 * 6x1 + 6x2 * 2x1
-			# _x_ = 6x1 + 6x1
-			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)
-			
-			print("mu:", self.mu)
-			
+			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)		
 			self.SIGMA_T = (self.I - K * self.H) * P_k
 			
 			mu_x = self.mu[0,0]
 			mu_y = self.mu[3,0]
-			
-			
-			
+
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, mu_x, mu_y)
 			turn_angle = math.atan2(delta_y, delta_x)
@@ -122,12 +111,10 @@ class Agent(object):
 			self.commands.append(command)
 
 	def get_Pk(self):
-		#6x6 = 6x6 * 6x6 * 6x6 * 6x6
 		P_k = self.F * self.SIGMA_T * self.F_t + self.SIGMA_Z
 		return P_k
 		
 	def get_K(self, P_k):
-		#6x2
 		K = P_k * self.H_t * np.linalg.inv(self.H * P_k * self.H_t + self.SIGMA_X)
 		return K
 
