@@ -27,16 +27,7 @@ class Agent(object):
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
 		self.ALPHA = 0.01
-		#self.BETA = 0.3
-		#self.OBS_TOLERANCE = 35.0
-		#self.S = 50
 		self.goalradius = 30
-		
-		#self.tankradius = 5
-		#self.avoidradius = 50
-		#self.avoidBETA = 0.1
-		
-		#self.aimtolerance = math.pi/20
 		
 		self.num_ticks = 0
 		self.MAXTICKS = 3000
