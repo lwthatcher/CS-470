@@ -93,14 +93,12 @@ class Agent(object):
 			self.SIGMA_T = (self.I - K * self.H) * P_k
 			
 			target_position = self.predict_future_position()
-			
-			#mu_x = self.mu[0,0]
-			#mu_y = self.mu[3,0]
-			mu_x = target_position[0,0]
-			mu_y = target_position[3,0]
+
+			#mu_x = target_position[0,0]
+			#mu_y = target_position[3,0]
 
 			#calculate angle
-			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, mu_x, mu_y)
+			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_position[0,0], target_position[3,0])
 			turn_angle = math.atan2(delta_y, delta_x)
 			relative_angle = self.normalize_angle(turn_angle - tank.angle)
 			
@@ -112,7 +110,7 @@ class Agent(object):
 	def predict_future_position(self):
 		future_position = self.F * self.mu
 		
-		for i in range(1, 200):
+		for i in range(1, 50): #approximately 1 second in the future
 			future_position = self.F * future_position
 		
 		return future_position
