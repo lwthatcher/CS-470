@@ -45,7 +45,7 @@ class Agent(object):
 		self.sigma_x = 25
 		self.sigma_y = 25
 		self.rho = 0.3
-		make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.rho)
+		self.make_map = GnuPlot(self, self.sigma_x, self.sigma_y, self.rho)
 		
 		self.COLORS = ['blue','red','green','purple']
 		self.color_index = 0
@@ -78,7 +78,7 @@ class Agent(object):
 			for tank in self.enemies:
 				self.mus.append([tank.x,tank.y])
 			print(self.mus)
-			make_map.generateGnuMap(self.mus)
+			self.make_map.generateGnuMap(self.mus)
 			self.wroteonce = True
 
 		
@@ -90,6 +90,7 @@ class Agent(object):
 		self.num_ticks = self.num_ticks + 1
 
 	def kalman(self, tank):
+		# get the closest enemy tank for the target
 		target = self.get_target_loc(tank)
 		if target != None:
 			
@@ -349,17 +350,18 @@ class GnuPlot():
 		print >>outfile, self.gnuplot_header(minimum, maximum)
 		print >>outfile, 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
 		print >>outfile, 'set isosamples 100\n'
-		
+		"""
 		for mu in mus:
-			print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, mus.index(mu), mu[0], mu[1], self.rho)
+			index = mus.index(mu)
+			print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, index, mu[0], mu[1], self.rho)
 			print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
-			* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
-			- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
-		
-		#print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
-		#print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
-		#* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
-		#- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
+			* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x{idx})**2 / sigma_x**2 + (y - mu_y{idx})**2 / sigma_y**2 \
+			- 2.0*rho*(x-mu_x{idx})*(y-mu_y{idx})/(sigma_x*sigma_y) ) ) with pm3d\n'.format(idx=index)
+		"""
+		print >>outfile, self.gnuplot_variables(self.sigma_x, self.sigma_y, mus[0][0], mus[0][1], self.rho)
+		print >>outfile, 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
+		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
+		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
 
 		outfile.close()
 	
@@ -378,7 +380,7 @@ class GnuPlot():
 		s += "set title 'Kalman Filter'\n"
 		return s
 	
-	def gnuplot_variables(self, sigma_x, sigma_y, index, mu_x, mu_y, rho):
+	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):
 		s = ''
 		s += 'sigma_x = {}\n'.format(sigma_x)
 		s += 'sigma_y = {}\n'.format(sigma_y)
