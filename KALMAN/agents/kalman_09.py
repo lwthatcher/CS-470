@@ -27,21 +27,11 @@ class Agent(object):
 		self.constants = self.bzrc.get_constants()
 		self.commands = []
 		self.ALPHA = 0.01
-		self.BETA = 0.3
-		self.OBS_TOLERANCE = 35.0
-		self.S = 50
 		self.goalradius = 30
-		
-		self.tankradius = 5
-		self.avoidradius = 50
-		self.avoidBETA = 0.1
-		
-		self.aimtolerance = math.pi/20
 		
 		self.num_ticks = 0
 		self.MAXTICKS = 3000
 		self.UPTICKS = 20
-		self.DEBUGTICKS = 400
 
 		self.rho = 0.3
 		
@@ -67,10 +57,10 @@ class Agent(object):
 		"""Some time has passed; decide what to do next."""
 		
 		mytanks, othertanks, flags, shots = self.bzrc.get_lots_o_stuff()
-		self.mytanks = mytanks
-		self.othertanks = othertanks
+		#self.mytanks = mytanks
+		#self.othertanks = othertanks
 		self.flags = [flag for flag in flags if flag.color != self.constants['team']]
-		self.shots = shots
+		#self.shots = shots
 		self.enemies = [tank for tank in othertanks if tank.color !=
 						self.constants['team']]
 		self.obstacles = self.bzrc.get_obstacles()
@@ -92,21 +82,17 @@ class Agent(object):
 
 	def kalman(self, tank):
 		target = self.get_target_loc(tank)
-		X = np.matrix([target.x, target.y])
+		X = np.matrix([[target.x],[target.y]])
 		if target != None:
 			
 			P_k = self.get_Pk()
 			K = self.get_K(P_k)
-			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)
+			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)		
 			self.SIGMA_T = (self.I - K * self.H) * P_k
 			
 			mu_x = self.mu[0,0]
 			mu_y = self.mu[3,0]
-			
-			if self.num_ticks % self.DEBUGTICKS == 0:
-				print 'target: x=', target.x, ", y=",target.y
-				print 'mu:\n', self.mu
-			
+
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, mu_x, mu_y)
 			turn_angle = math.atan2(delta_y, delta_x)
