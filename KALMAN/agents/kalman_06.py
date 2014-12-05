@@ -39,7 +39,8 @@ class Agent(object):
 		self.aimtolerance = math.pi/20
 		
 		self.num_ticks = 0
-		self.MAXTICKS = 200
+		self.MAXTICKS = 3000
+		self.UPTICKS = 20
 		self.sigma_x = 25
 		self.sigma_y = 25
 		self.mu_x = 0
@@ -77,9 +78,11 @@ class Agent(object):
 		for tank in mytanks:
 			self.kalman(tank)
 		
-		if self.num_ticks % self.MAXTICKS == 0:
+		if self.num_ticks % self.UPTICKS == 0:
 			self.make_map.update_mu(self.mu_x, self.mu_y)
 			self.make_map.add_animation()
+		
+		if self.num_ticks % self.MAXTICKS == 0:			
 			self.make_map.generateGnuMap()		
 
 		results = self.bzrc.do_commands(self.commands)
@@ -341,8 +344,6 @@ class GnuPlot():
 		self.mu_y = mu_y
 		self.rho = rho
 		
-		self.minimum = -self.WORLDSIZE / 2
-		self.maximum = self.WORLDSIZE / 2
 		self.output = ''
 	
 	
@@ -351,18 +352,19 @@ class GnuPlot():
 		self.mu_y = mu_y
 		
 	def add_animation(self):
-		self.output += self.gnuplot_header(self.minimum, self.maximum)
-		self.output += 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
-		self.output += 'set isosamples 100\n'
 		self.output += self.gnuplot_variables(self.sigma_x, self.sigma_y, self.mu_x, self.mu_y, self.rho)
 		self.output += 'splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) \
 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 \
 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
+		self.output += 'pause 0.1\n'
 	
 	def generateGnuMap(self):
 		outfile = open(self.FILENAME, 'w')
 		minimum = -self.WORLDSIZE / 2
 		maximum = self.WORLDSIZE / 2
+		print >>outfile, self.gnuplot_header(minimum, maximum)
+		print >>outfile, 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
+		print >>outfile, 'set isosamples 100\n'
 		print >>outfile, self.output
 		self.output = ''
 
