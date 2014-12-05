@@ -47,6 +47,8 @@ class Agent(object):
 		self.avoidBETA = 0.1
 		
 		self.aimtolerance = math.pi/20
+		
+		self.tank_goals = []
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -62,9 +64,10 @@ class Agent(object):
 		
 		#make_map = GnuPlot(self, self.flags, self.obstacles) 
 		
-		'''if not self.wroteonce:
-			make_map.generateGnuMap()
-			self.wroteonce = True'''
+		if not self.wroteonce:
+			for tank in self.mytanks:
+				self.tank_goals.append('CENTER')
+			self.wroteonce = True
 		'''
 		for tank in mytanks:
 			if tank.flag == '-':
@@ -82,8 +85,20 @@ class Agent(object):
 			self.move_forward(tank)
 
 	def move_forward(self, tank):		
-		command = Command(tank.index, 1, 0, False)
-		self.commands.append(command)
+		target = self.tank_goals[tank.index]
+		if target == 'CENTER':
+			self.move_to_position(tank, 0, 0)
+			dist_x = 0 - tank.x
+			dist_y = 0 - tank.y
+			if (abs(dist_x) < 10 and abs(dist_y) < 10):
+				self.tank_goals[tank.index] = 'BASE'
+		else: #target == 'BASE'
+			base_x, base_y = self.get_base_center(self.get_my_base())
+			self.move_to_position(tank, base_x, base_y)
+			dist_x = base_x - tank.x
+			dist_y = base_y - tank.y
+			if (abs(dist_x) < 10 and abs(dist_y) < 10):
+				self.tank_goals[tank.index] = 'CENTER'
 
 	def get_my_base(self):
 		mybases = [base for base in self.bzrc.get_bases() if base.color == self.constants['team']]
@@ -221,13 +236,10 @@ class Agent(object):
 		
 		#get deltas
 		delta_xG, delta_yG, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_x, target_y)
-		delta_xO, delta_yO = self.calculate_obstacles_delta(tank.x, tank.y)
-		delta_xR, delta_yR = self.calculate_random_delta()
-		delta_xA, delta_yA = self.calculate_enemies_delta(tank.x, tank.y, self.enemies)
 		
 		#combine
-		delta_x = delta_xG + delta_xO + delta_xR + delta_xA
-		delta_y = delta_yG + delta_yO + delta_yR + delta_xA
+		delta_x = delta_xG
+		delta_y = delta_yG
 		
 		#calculate angle
 		turn_angle = math.atan2(delta_y, delta_x)
@@ -239,7 +251,7 @@ class Agent(object):
 			
 		fire = self.should_fire(tank)
 		
-		command = Command(tank.index, magnitude, 2 * relative_angle, fire)
+		command = Command(tank.index, 1, 2 * relative_angle, False)
 		self.commands.append(command)
 	
 	def get_obstacle_force(self, obstacle, x, y):

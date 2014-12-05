@@ -41,6 +41,7 @@ class Agent(object):
 		self.num_ticks = 0
 		self.MAXTICKS = 3000
 		self.UPTICKS = 20
+		self.DEBUGTICKS = 400
 
 		self.rho = 0.3
 		
@@ -101,6 +102,10 @@ class Agent(object):
 			
 			mu_x = self.mu[0,0]
 			mu_y = self.mu[3,0]
+			
+			if self.num_ticks % self.DEBUGTICKS == 0:
+				print 'target: x=', target.x, ", y=",target.y
+				print 'mu:\n', self.mu
 			
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, mu_x, mu_y)
