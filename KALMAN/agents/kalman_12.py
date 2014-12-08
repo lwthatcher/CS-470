@@ -100,18 +100,20 @@ class Agent(object):
 			iterations = 0
 			if current_shot_dist <= self.shotrange:
 				iterations = int(current_shot_dist)
-			target_position = self.predict_future_position(iterations)
+			target_position = self.predict_future_position(iterations + 20)
 
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_position[0,0], target_position[3,0])
 			turn_angle = math.atan2(delta_y, delta_x)
 			relative_angle = self.normalize_angle(turn_angle - tank.angle)
 			
-			if abs(relative_angle) < 0.001:
-				command = Command(tank.index, 0, 2 * relative_angle, False)
-				#print "relative_angle", relative_angle
-			else:
+			if iterations == 0:
+				command = Command(tank.index, 0, 0, False)
+			elif abs(relative_angle) < 0.005:
 				command = Command(tank.index, 0, 2 * relative_angle, True)
+			else:
+				command = Command(tank.index, 0, 2 * relative_angle, False)
+			
 			self.commands.append(command)
 		else:
 			self.victory_lap(tank)
