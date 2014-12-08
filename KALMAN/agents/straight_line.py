@@ -62,9 +62,11 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []
 		
-		print(self.constants)
+		#print(self.constants)
 		
 		#make_map = GnuPlot(self, self.flags, self.obstacles) 
+		
+		
 		
 		if not self.wroteonce:
 			for tank in self.mytanks:

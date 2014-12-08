@@ -25,6 +25,7 @@ class Agent(object):
 	def __init__(self, bzrc):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
+		self.shotspeed = self.constants['shotspeed']
 		self.commands = []
 		self.ALPHA = 0.01
 		self.goalradius = 30
@@ -58,7 +59,7 @@ class Agent(object):
 		"""Some time has passed; decide what to do next."""
 		
 		mytanks, othertanks, flags, shots = self.bzrc.get_lots_o_stuff()
-		#self.mytanks = mytanks
+		self.mytanks = mytanks
 		#self.othertanks = othertanks
 		self.flags = [flag for flag in flags if flag.color != self.constants['team']]
 		#self.shots = shots
@@ -68,7 +69,7 @@ class Agent(object):
 		self.commands = []		
 		
 		
-		for tank in mytanks:
+		for tank in self.mytanks:
 			self.kalman(tank)
 		
 		if self.num_ticks % self.UPTICKS == 0:
@@ -77,6 +78,7 @@ class Agent(object):
 			self.make_map.add_animation()
 		
 		if self.num_ticks % self.MAXTICKS == 0:	
+			self.reset()
 			print "printing map"		
 			self.make_map.generateGnuMap()		
 
@@ -93,7 +95,13 @@ class Agent(object):
 			self.mu = self.F * self.mu + K * (X - self.H * self.F * self.mu)		
 			self.SIGMA_T = (self.I - K * self.H) * P_k
 			
-			target_position = self.predict_future_position()
+			current_shot_dist = self.get_target_dist(tank.x, tank.y, sensor.x, sensor.y)
+			
+			iterations = 0
+			if current_shot_dist <= 350:
+				iterations = int(current_shot_dist)
+			print "iterations:", iterations
+			target_position = self.predict_future_position(iterations)
 
 			#mu_x = target_position[0,0]
 			#mu_y = target_position[3,0]
@@ -103,20 +111,27 @@ class Agent(object):
 			turn_angle = math.atan2(delta_y, delta_x)
 			relative_angle = self.normalize_angle(turn_angle - tank.angle)
 			
-			command = Command(tank.index, 0, 2 * relative_angle, True)
+			if abs(relative_angle) < 0.001:
+				command = Command(tank.index, 0, 2 * relative_angle, False)
+				#print "relative_angle", relative_angle
+			else:
+				command = Command(tank.index, 0, 2 * relative_angle, True)
 			self.commands.append(command)
 		else:
 			self.victory_lap(tank)
 
-	def predict_future_position(self):
+	def predict_future_position(self, iterations):
 		future_position = self.F * self.mu
 		
-		for i in range(1, 50): #approximately 1 second in the future
+		for i in range(1, iterations): #approximately 1 second in the future
 			future_position = self.F * future_position
 		
 		return future_position
-			
-
+	
+	def get_target_dist(self, tank_x, tank_y, target_x, target_y):
+		dist = math.sqrt((tank_x - target_x)**2 + (tank_y - target_y)**2)
+		return dist
+	
 	def get_Pk(self):
 		P_k = self.F * self.SIGMA_T * self.F_t + self.SIGMA_Z
 		return P_k
@@ -125,6 +140,9 @@ class Agent(object):
 		K = P_k * self.H_t * np.linalg.inv(self.H * P_k * self.H_t + self.SIGMA_X)
 		return K
 
+	def reset(self):
+		self.SIGMA_T = self.SIGMA_0
+	
 	def get_target_loc(self):
 		target = None
 		color, tank = self.get_target_color()
@@ -252,7 +270,7 @@ class GnuPlot():
 		self.update_sigma(SIGMA_T)		
 
 		self.mu_x = mu[0,0]
-		self.mu_y = mu[3,0]
+		self.mu_y = mu[2,0]
 		
 		self.output = ''	
 	
@@ -272,15 +290,16 @@ class GnuPlot():
 		return sigma_x
 		
 	def get_sigma_y(self):
-		var_y = self.SIGMA_T[3,3]
+		var_y = self.SIGMA_T[2,2]
 		sigma_y = math.sqrt(var_y)
 		return sigma_y
 		
 	def get_rho(self):
 		sigma_x = self.get_sigma_x()
 		sigma_y = self.get_sigma_y()
-		sigma_xy = self.SIGMA_T[3,0]
+		sigma_xy = self.SIGMA_T[2,0]
 		rho = sigma_xy / (sigma_x * sigma_y)
+		print "rho:", rho
 		return rho
 		
 	def add_animation(self):
