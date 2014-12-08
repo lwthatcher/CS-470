@@ -261,24 +261,24 @@ class GnuPlot():
 		
 	def update_sigma(self, SIGMA_T):
 		self.SIGMA_T = SIGMA_T
-		self.sigma_x = get_sigma_x()
-		self.sigma_y = get_sigma_y()
-		self.rho = get_rho()		
+		self.sigma_x = self.get_sigma_x()
+		self.sigma_y = self.get_sigma_y()
+		self.rho = self.get_rho()		
 		
 	def get_sigma_x(self):
-		var_x = SIGMA_T[0,0]
+		var_x = self.SIGMA_T[0,0]
 		sigma_x = math.sqrt(var_x)
 		return sigma_x
 		
 	def get_sigma_y(self):
-		var_y = SIGMA_T[3,3]
+		var_y = self.SIGMA_T[3,3]
 		sigma_y = math.sqrt(var_y)
 		return sigma_y
 		
 	def get_rho(self):
 		sigma_x = self.get_sigma_x()
 		sigma_y = self.get_sigma_y()
-		sigma_xy = SIGMA_T[3,0]
+		sigma_xy = self.SIGMA_T[3,0]
 		rho = sigma_xy / (sigma_x * sigma_y)
 		return rho
 		
