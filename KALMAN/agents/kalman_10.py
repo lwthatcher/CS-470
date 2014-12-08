@@ -67,6 +67,7 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []		
 		
+		print(self.constants)
 		
 		for tank in mytanks:
 			self.kalman(tank)
