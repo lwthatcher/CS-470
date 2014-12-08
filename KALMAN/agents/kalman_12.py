@@ -26,6 +26,7 @@ class Agent(object):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
 		self.shotspeed = self.constants['shotspeed']
+		self.shotrange = self.constants['shotrange']
 		self.commands = []
 		self.ALPHA = 0.01
 		self.goalradius = 30
@@ -68,7 +69,6 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []		
 		
-		
 		for tank in self.mytanks:
 			self.kalman(tank)
 		
@@ -98,13 +98,9 @@ class Agent(object):
 			current_shot_dist = self.get_target_dist(tank.x, tank.y, sensor.x, sensor.y)
 			
 			iterations = 0
-			if current_shot_dist <= 350:
+			if current_shot_dist <= self.shotrange:
 				iterations = int(current_shot_dist)
-			print "iterations:", iterations
 			target_position = self.predict_future_position(iterations)
-
-			#mu_x = target_position[0,0]
-			#mu_y = target_position[3,0]
 
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_position[0,0], target_position[3,0])
@@ -123,7 +119,7 @@ class Agent(object):
 	def predict_future_position(self, iterations):
 		future_position = self.F * self.mu
 		
-		for i in range(1, iterations): #approximately 1 second in the future
+		for i in range(1, iterations):
 			future_position = self.F * future_position
 		
 		return future_position
@@ -299,7 +295,6 @@ class GnuPlot():
 		sigma_y = self.get_sigma_y()
 		sigma_xy = self.SIGMA_T[2,0]
 		rho = sigma_xy / (sigma_x * sigma_y)
-		print "rho:", rho
 		return rho
 		
 	def add_animation(self):
