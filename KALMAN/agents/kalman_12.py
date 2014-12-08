@@ -73,6 +73,7 @@ class Agent(object):
 		
 		if self.num_ticks % self.UPTICKS == 0:
 			self.make_map.update_mu(self.mu_x, self.mu_y)
+			self.make_map.update_sigma(self.SIGMA_T)
 			self.make_map.add_animation()
 		
 		if self.num_ticks % self.MAXTICKS == 0:	
