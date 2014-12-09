@@ -119,7 +119,8 @@ class Agent(object):
 			turn_angle = math.atan2(delta_y, delta_x)
 			relative_angle = self.normalize_angle(turn_angle - tank.angle)
 			
-			if abs(relative_angle) < self.aimthreshold and abs(future_shot_dist - current_shot_dist) < 20:
+			#if abs(relative_angle) < self.aimthreshold and abs(future_shot_dist - current_shot_dist) < 20:
+			if abs(relative_angle) < self.aimthreshold:
 				command = Command(tank.index, 0, 2 * relative_angle, True)
 			else:
 				command = Command(tank.index, 0, 2 * relative_angle, False)
