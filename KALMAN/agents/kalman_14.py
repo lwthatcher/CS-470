@@ -25,7 +25,7 @@ class Agent(object):
 	def __init__(self, bzrc):
 		self.bzrc = bzrc
 		self.constants = self.bzrc.get_constants()
-		self.shotspeed = self.constants['shotspeed']
+		self.shotspeed = int(self.constants['shotspeed'])
 		self.commands = []
 		self.ALPHA = 0.01
 		self.goalradius = 30
