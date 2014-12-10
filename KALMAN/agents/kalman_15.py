@@ -414,9 +414,9 @@ class GnuPlot():
 	
 	def gnuplot_points(self):
 		s = ''
-		s += 'plot "<echo \'{} {}\'" with points ls 1,'.format(self.mu_x, self.mu_y)
-		s += ' "<echo \'{} {}\'" with points ls 2,'.format(self.prediction_x, self.prediction_y)
-		s += ' "<echo \'{} {}\'" with points ls 3'.format(self.observed_x, self.observed_y)
+		s += 'plot "<echo \'{} {}\'" with points ls 1,'.format(self.observed_x, self.observed_y)
+		s += ' "<echo \'{} {}\'" with points ls 2,'.format(self.mu_x, self.mu_y)
+		s += ' "<echo \'{} {}\'" with points ls 3'.format(self.prediction_x, self.prediction_y)
 		return s
 	
 	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):
