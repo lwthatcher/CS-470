@@ -32,7 +32,13 @@ class Agent(object):
 		self.goalradius = 30
 		
 		self.num_ticks = 1
+<<<<<<< HEAD
 		self.MAXTICKS = 5000
+=======
+		#self.MAXTICKS = 5000
+		self.RESET = 5000
+		self.MAXTICKS = 100
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 		self.UPTICKS = 20
 
 		self.rho = 0.3
@@ -45,7 +51,11 @@ class Agent(object):
 		self.DELTA_T = DELTA_T
 		self.I = np.matrix([[1, 0, 0, 0, 0, 0],[0, 1, 0, 0, 0, 0],[0, 0, 1, 0, 0, 0],[0, 0, 0, 1, 0, 0],[0, 0, 0, 0, 1, 0],[0, 0, 0, 0, 0, 1]])
 		self.SIGMA_X = np.matrix('25 0;0 25')
+<<<<<<< HEAD
 		self.SIGMA_Z = np.matrix([[0.1, 0, 0, 0, 0, 0],[0, 0.2, 0, 0, 0, 0],[0, 0, 50, 0, 0, 0],[0, 0, 0, 0.1, 0, 0],[0, 0, 0, 0, 0.2, 0],[0, 0, 0, 0, 0, 50]])
+=======
+		self.SIGMA_Z = np.matrix([[0.1, 0, 0, 0, 0, 0],[0, 0.2, 0, 0, 0, 0],[0, 0, 90, 0, 0, 0],[0, 0, 0, 0.1, 0, 0],[0, 0, 0, 0, 0.2, 0],[0, 0, 0, 0, 0, 90]])
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 		self.SIGMA_0 = np.matrix([[90, 0, 0, 0, 0, 0],[0, 0.1, 0, 0, 0, 0],[0, 0, 0.1, 0, 0, 0],[0, 0, 0, 90, 0, 0],[0, 0, 0, 0, 0.1, 0],[0, 0, 0, 0, 0, 0.1]])
 		self.SIGMA_T = self.SIGMA_0
 		self.H = np.matrix('1 0 0 0 0 0;0 0 0 1 0 0')
@@ -53,8 +63,17 @@ class Agent(object):
 		self.F = np.matrix([[1, DELTA_T, (DELTA_T**2) / 2, 0, 0, 0], [0, 1, DELTA_T, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, DELTA_T, (DELTA_T**2) / 2], [0, 0, 0, 0, 1, DELTA_T], [0, 0, 0, 0, 0, 1]])
 		self.F_t = self.F.getT()
 		self.mu = np.matrix('1;0;0;1;0;0')
+<<<<<<< HEAD
 		
 		self.make_map = GnuPlot(self, self.SIGMA_T, self.mu) 
+=======
+		self.observed_position = np.matrix('0;0')
+		self.predicted_position = np.matrix('1;0;0;1;0;0') 
+		
+		self.make_map = GnuPlot(self, self.SIGMA_T, self.mu) 
+		
+		self.file_index = 0
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -70,6 +89,7 @@ class Agent(object):
 		self.commands = []		
 		
 		for tank in self.mytanks:
+<<<<<<< HEAD
 			self.kalman(tank)
 		
 		if self.num_ticks % self.UPTICKS == 0:
@@ -82,6 +102,26 @@ class Agent(object):
 			self.reset()
 			print "printing map"		
 			self.make_map.generateGnuMap()		
+=======
+			self.observed_position, self.predicted_position = self.kalman(tank)
+		
+		if self.num_ticks % self.UPTICKS == 0:
+			self.make_map.update_observed_position(self.observed_position)
+			self.make_map.update_predicted_position(self.predicted_position)
+			#self.make_map.update_mu(self.mu_x, self.mu_y)
+			self.make_map.update_mu(self.mu[0,0], self.mu[3,0])
+			self.make_map.update_sigma(self.SIGMA_T)
+			self.make_map.add_animation()
+		
+		if self.num_ticks % self.MAXTICKS == 0:	
+			#print "printing map", self.file_index	
+			self.make_map.update_file_index(self.file_index)
+			self.file_index = self.file_index + 1	
+			self.make_map.generateGnuMaps()
+			
+		if self.num_ticks % self.RESET == 0:
+			self.reset()	
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 
 		results = self.bzrc.do_commands(self.commands)
 		self.num_ticks = self.num_ticks + 1
@@ -101,13 +141,18 @@ class Agent(object):
 			iterations = 0
 			if current_shot_dist <= self.shotrange:
 				iterations = int(current_shot_dist)
+<<<<<<< HEAD
 			target_position = self.predict_future_position(iterations)
+=======
+			target_position = self.predict_future_position(iterations + 20)
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 
 			#calculate angle
 			delta_x, delta_y, magnitude = self.calculate_objective_delta(tank.x, tank.y, target_position[0,0], target_position[3,0])
 			turn_angle = math.atan2(delta_y, delta_x)
 			relative_angle = self.normalize_angle(turn_angle - tank.angle)
 			
+<<<<<<< HEAD
 			if abs(relative_angle) < 0.001:
 				command = Command(tank.index, 0, 2 * relative_angle, False)
 				#print "relative_angle", relative_angle
@@ -116,6 +161,24 @@ class Agent(object):
 			self.commands.append(command)
 		else:
 			self.victory_lap(tank)
+=======
+			if iterations == 0:
+				command = Command(tank.index, 0, 0, False)
+			elif abs(relative_angle) < 0.005:
+				command = Command(tank.index, 0, 2 * relative_angle, True)
+			else:
+				command = Command(tank.index, 0, 2 * relative_angle, False)
+			
+			self.commands.append(command)
+			
+			#print "X",X
+			#print "mu",self.mu
+			
+		else:
+			self.victory_lap(tank)
+		
+		return X, target_position
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 
 	def predict_future_position(self, iterations):
 		future_position = self.F * self.mu
@@ -261,6 +324,7 @@ class GnuPlot():
 		self.agent = agent
 		self.bzrc = agent.bzrc
 		
+<<<<<<< HEAD
 		self.FILENAME = 'plot.gpi'
 		self.WORLDSIZE = 800
 
@@ -270,6 +334,37 @@ class GnuPlot():
 		self.mu_y = mu[2,0]
 		
 		self.output = ''	
+=======
+		self.VAR_FILE = 'var.gpi'
+		self.POINTS_FILE = 'points.gpi'
+		self.WORLDSIZE = 800
+
+		self.update_sigma(SIGMA_T)		
+		
+		# estimated position
+		self.mu_x = mu[0,0]
+		self.mu_y = mu[2,0]
+		
+		self.prediction_x = 1
+		self.prediction_y = 1
+		
+		self.observed_x = 1
+		self.observed_y = 1
+		
+		self.output = ''
+	
+	def update_file_index(self, index):
+		self.VAR_FILE = 'GnuVariance/var{}.gpi'.format(index)
+		self.POINTS_FILE = 'GnuPoints/points{}.gpi'.format(index)
+	
+	def update_observed_position(self, observation):
+		self.observed_x = observation[0,0]
+		self.observed_y = observation[1,0]
+	
+	def update_predicted_position(self, prediction):
+		self.prediction_x = prediction[0,0]
+		self.prediction_y = prediction[3,0]
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 	
 	def update_mu(self, mu_x, mu_y):
 		self.mu_x = mu_x
@@ -305,7 +400,14 @@ class GnuPlot():
 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d\n'
 		self.output += 'pause 0.1\n'
 	
+<<<<<<< HEAD
 	def generateGnuMap(self):
+=======
+	def generateGnuMaps(self):
+		self.generateVarianceMap()
+		self.generatePointsMap()
+		"""
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 		outfile = open(self.FILENAME, 'w')
 		minimum = -self.WORLDSIZE / 2
 		maximum = self.WORLDSIZE / 2
@@ -316,8 +418,50 @@ class GnuPlot():
 		self.output = ''
 
 		outfile.close()
+<<<<<<< HEAD
 	
 	def gnuplot_header(self, minimum, maximum):
+=======
+		"""
+		
+	def generatePointsMap(self):
+		outfile = open(self.POINTS_FILE, 'w')
+		minimum = -self.WORLDSIZE / 2
+		maximum = self.WORLDSIZE / 2
+		
+		print >>outfile, self.gnuplot_points_header(minimum, maximum)
+		print >>outfile, self.gnuplot_points()
+		outfile.close()
+	
+	def generateVarianceMap(self):
+		outfile = open(self.VAR_FILE, 'w')
+		minimum = -self.WORLDSIZE / 2
+		maximum = self.WORLDSIZE / 2
+		print >>outfile, self.gnuplot_var_header(minimum, maximum)
+		print >>outfile, 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
+		print >>outfile, 'set isosamples 100\n'
+		print >>outfile, self.output
+		self.output = ''
+
+		outfile.close()
+	
+	def gnuplot_points_header(self, minimum, maximum):
+		#print "minimum:", minimum
+		#print "maximum:", maximum
+		s = ''
+		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
+		s += 'set yrange [%s: %s]\n' % (minimum, maximum)
+		s += 'set view map\n'
+		# The key is just clutter.  Get rid of it:
+		#s += 'unset key\n'
+		# Make sure the figure is square since the world is square:
+		s += 'set size square\n'
+		# Add a pretty title (optional):
+		s += "set title 'Kalman Filter (Positions)'\n"
+		return s
+	
+	def gnuplot_var_header(self, minimum, maximum):
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 		'''Return a string that has all of the gnuplot sets and unsets.'''
 		s = ''
 		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
@@ -329,7 +473,18 @@ class GnuPlot():
 		# Make sure the figure is square since the world is square:
 		s += 'set size square\n'
 		# Add a pretty title (optional):
+<<<<<<< HEAD
 		s += "set title 'Kalman Filter'\n"
+=======
+		s += "set title 'Kalman Filter (Variance)'\n"
+		return s
+	
+	def gnuplot_points(self):
+		s = ''
+		s += 'plot "<echo \'{} {}\'" with points ls 1,'.format(self.mu_x, self.mu_y)
+		s += ' "<echo \'{} {}\'" with points ls 2,'.format(self.prediction_x, self.prediction_y)
+		s += ' "<echo \'{} {}\'" with points ls 3'.format(self.observed_x, self.observed_y)
+>>>>>>> e1ce37e87d798bb7a8ac1a27dcfc4436c3501139
 		return s
 	
 	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):

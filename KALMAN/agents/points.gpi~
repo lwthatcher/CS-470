@@ -1,0 +1,4 @@
+set xrange [-400: 400]
+set yrange [-400: 400]
+
+plot "<estimated '-204.227499247 -10.1292647965'" with points ls 1, "<echo '-198.666150817 2.63995128983'" with points ls 2, "<echo '-204.227499247 -10.1292647965'" with points ls 3

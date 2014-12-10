@@ -70,9 +70,11 @@ class Agent(object):
 		self.commands = []		
 		
 		for tank in self.mytanks:
-			self.kalman(tank)
+			observed_position, predicted_position = self.kalman(tank)
 		
 		if self.num_ticks % self.UPTICKS == 0:
+			self.make_map.update_observed_position(observed_position)
+			self.make_map.update_predicted_position(predicted_position)
 			self.make_map.update_mu(self.mu_x, self.mu_y)
 			self.make_map.update_sigma(self.SIGMA_T)
 			self.make_map.add_animation()
@@ -117,6 +119,8 @@ class Agent(object):
 			self.commands.append(command)
 		else:
 			self.victory_lap(tank)
+		
+		return X, target_position
 
 	def predict_future_position(self, iterations):
 		future_position = self.F * self.mu
@@ -266,11 +270,26 @@ class GnuPlot():
 		self.WORLDSIZE = 800
 
 		self.update_sigma(SIGMA_T)		
-
+		
+		# estimated position
 		self.mu_x = mu[0,0]
 		self.mu_y = mu[2,0]
 		
-		self.output = ''	
+		self.prediction_x = 1
+		self.prediction_y = 1
+		
+		self.observed_x = 1
+		self.observed_y = 1
+		
+		self.output = ''
+	
+	def update_observed_position(self, observation):
+		self.observed_x = observation[0,0]
+		self.observed_y = observation[1,0]
+	
+	def update_predicted_position(self, prediction):
+		self.prediction_x = prediction[0,0]
+		self.prediction_y = prediction[2,0]
 	
 	def update_mu(self, mu_x, mu_y):
 		self.mu_x = mu_x
