@@ -1,0 +1,48 @@
+set xrange [-400: 400]
+set yrange [-400: 400]
+set pm3d
+set view map
+unset key
+set size square
+set title 'Kalman Filter (Variance)'
+
+set palette model RGB functions 1-gray, 1-gray, 1-gray
+
+set isosamples 100
+
+sigma_x = 1.34274152977
+sigma_y = 42.4215858944
+mu_x = -0.751849573418
+mu_y = 2.77032043664
+rho = 0.0326782452713
+splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
+pause 0.1
+sigma_x = 1.28286168282
+sigma_y = 59.6073753179
+mu_x = 8.56808889447
+mu_y = -0.381045501233
+rho = 0.165334409877
+splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
+pause 0.1
+sigma_x = 1.37512321415
+sigma_y = 70.10856693
+mu_x = 8.68778007593
+mu_y = 3.45372376576
+rho = 0.316869170814
+splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
+pause 0.1
+sigma_x = 1.4818705955
+sigma_y = 73.8757473493
+mu_x = 16.3209078512
+mu_y = 1.5982654795
+rho = 0.388804028617
+splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
+pause 0.1
+sigma_x = 1.53286404137
+sigma_y = 74.3984068574
+mu_x = 27.7297154017
+mu_y = 5.5551532438
+rho = 0.391755019696
+splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
+pause 0.1
+

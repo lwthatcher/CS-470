@@ -32,7 +32,9 @@ class Agent(object):
 		self.goalradius = 30
 		
 		self.num_ticks = 1
-		self.MAXTICKS = 5000
+		#self.MAXTICKS = 5000
+		self.RESET = 5000
+		self.MAXTICKS = 100
 		self.UPTICKS = 20
 
 		self.rho = 0.3
@@ -53,8 +55,12 @@ class Agent(object):
 		self.F = np.matrix([[1, DELTA_T, (DELTA_T**2) / 2, 0, 0, 0], [0, 1, DELTA_T, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, DELTA_T, (DELTA_T**2) / 2], [0, 0, 0, 0, 1, DELTA_T], [0, 0, 0, 0, 0, 1]])
 		self.F_t = self.F.getT()
 		self.mu = np.matrix('1;0;0;1;0;0')
+		self.observed_position = np.matrix('0;0')
+		self.predicted_position = np.matrix('1;0;0;1;0;0') 
 		
 		self.make_map = GnuPlot(self, self.SIGMA_T, self.mu) 
+		
+		self.file_index = 0
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -70,19 +76,24 @@ class Agent(object):
 		self.commands = []		
 		
 		for tank in self.mytanks:
-			observed_position, predicted_position = self.kalman(tank)
+			self.observed_position, self.predicted_position = self.kalman(tank)
 		
 		if self.num_ticks % self.UPTICKS == 0:
-			self.make_map.update_observed_position(observed_position)
-			self.make_map.update_predicted_position(predicted_position)
-			self.make_map.update_mu(self.mu_x, self.mu_y)
+			self.make_map.update_observed_position(self.observed_position)
+			self.make_map.update_predicted_position(self.predicted_position)
+			#self.make_map.update_mu(self.mu_x, self.mu_y)
+			self.make_map.update_mu(self.mu[0,0], self.mu[3,0])
 			self.make_map.update_sigma(self.SIGMA_T)
 			self.make_map.add_animation()
 		
 		if self.num_ticks % self.MAXTICKS == 0:	
-			self.reset()
-			print "printing map"		
-			self.make_map.generateGnuMaps()		
+			#print "printing map", self.file_index	
+			self.make_map.update_file_index(self.file_index)
+			self.file_index = self.file_index + 1	
+			self.make_map.generateGnuMaps()
+			
+		if self.num_ticks % self.RESET == 0:
+			self.reset()	
 
 		results = self.bzrc.do_commands(self.commands)
 		self.num_ticks = self.num_ticks + 1
@@ -117,6 +128,10 @@ class Agent(object):
 				command = Command(tank.index, 0, 2 * relative_angle, False)
 			
 			self.commands.append(command)
+			
+			#print "X",X
+			#print "mu",self.mu
+			
 		else:
 			self.victory_lap(tank)
 		
@@ -284,13 +299,17 @@ class GnuPlot():
 		
 		self.output = ''
 	
+	def update_file_index(self, index):
+		self.VAR_FILE = 'GnuVariance/var{}.gpi'.format(index)
+		self.POINTS_FILE = 'GnuPoints/points{}.gpi'.format(index)
+	
 	def update_observed_position(self, observation):
 		self.observed_x = observation[0,0]
 		self.observed_y = observation[1,0]
 	
 	def update_predicted_position(self, prediction):
 		self.prediction_x = prediction[0,0]
-		self.prediction_y = prediction[2,0]
+		self.prediction_y = prediction[3,0]
 	
 	def update_mu(self, mu_x, mu_y):
 		self.mu_x = mu_x
@@ -346,6 +365,7 @@ class GnuPlot():
 		outfile = open(self.POINTS_FILE, 'w')
 		minimum = -self.WORLDSIZE / 2
 		maximum = self.WORLDSIZE / 2
+		
 		print >>outfile, self.gnuplot_points_header(minimum, maximum)
 		print >>outfile, self.gnuplot_points()
 		outfile.close()
@@ -362,17 +382,20 @@ class GnuPlot():
 
 		outfile.close()
 	
-	def gnuplot_points_header(self, minumum, maximum):
+	def gnuplot_points_header(self, minimum, maximum):
+		#print "minimum:", minimum
+		#print "maximum:", maximum
 		s = ''
 		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
 		s += 'set yrange [%s: %s]\n' % (minimum, maximum)
 		s += 'set view map\n'
 		# The key is just clutter.  Get rid of it:
-		s += 'unset key\n'
+		#s += 'unset key\n'
 		# Make sure the figure is square since the world is square:
 		s += 'set size square\n'
 		# Add a pretty title (optional):
 		s += "set title 'Kalman Filter (Positions)'\n"
+		return s
 	
 	def gnuplot_var_header(self, minimum, maximum):
 		'''Return a string that has all of the gnuplot sets and unsets.'''
@@ -391,9 +414,9 @@ class GnuPlot():
 	
 	def gnuplot_points(self):
 		s = ''
-		s += 'plot "<echo \'{} {}\' with points ls 1, \\'.format(self.mu_x, self.mu_y)
-		s += ' "<echo \'{} {}\' with points ls 2, \\'.format(self.prediction_x, self.prediction_y)
-		s += ' "<echo \'{} {}\' with points ls 3'.format(self.observed_x, self.observed_y)
+		s += 'plot "<echo \'{} {}\'" with points ls 1,'.format(self.mu_x, self.mu_y)
+		s += ' "<echo \'{} {}\'" with points ls 2,'.format(self.prediction_x, self.prediction_y)
+		s += ' "<echo \'{} {}\'" with points ls 3'.format(self.observed_x, self.observed_y)
 		return s
 	
 	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):

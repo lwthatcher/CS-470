@@ -1,0 +1,7 @@
+set xrange [-400: 400]
+set yrange [-400: 400]
+set view map
+set size square
+set title 'Kalman Filter (Positions)'
+
+plot "<echo '19.4664517858 -3.77658765954'" with points ls 1, "<echo '44.7830503469 -47.5585807046'" with points ls 2, "<echo '17.5761573931 -1.21863033395'" with points ls 3
