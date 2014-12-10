@@ -12,526 +12,526 @@ set isosamples 100
 
 sigma_x = 3.40348681015
 sigma_y = 3.40348681015
-mu_x = 142.104920827
-mu_y = -43.1088145515
+mu_x = 187.592368425
+mu_y = 58.3585633536
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.40367467669
 sigma_y = 3.40367467669
-mu_x = 144.43185515
-mu_y = -41.7980149567
+mu_x = 176.824761667
+mu_y = 66.2394065366
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.40404639281
 sigma_y = 3.40404639281
-mu_x = 129.471121124
-mu_y = -31.3386279925
+mu_x = 188.882702525
+mu_y = 58.0210642836
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.40469175301
 sigma_y = 3.40469175301
-mu_x = 129.46648032
-mu_y = -30.8524178094
+mu_x = 179.805058953
+mu_y = 51.6096834104
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.40568395413
 sigma_y = 3.40568395413
-mu_x = 122.896800073
-mu_y = -27.7786146826
+mu_x = 170.736329768
+mu_y = 46.711401511
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.407063641
 sigma_y = 3.407063641
-mu_x = 116.427413133
-mu_y = -30.5585101823
+mu_x = 165.51744772
+mu_y = 59.9314369628
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.40882044209
 sigma_y = 3.40882044209
-mu_x = 115.884748339
-mu_y = -30.6269601204
+mu_x = 156.432519923
+mu_y = 59.276530516
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.41088044261
 sigma_y = 3.41088044261
-mu_x = 100.546846072
-mu_y = -30.6985011989
+mu_x = 152.816834167
+mu_y = 50.153473289
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.41311021686
 sigma_y = 3.41311021686
-mu_x = 100.571593503
-mu_y = -28.6404010284
+mu_x = 148.149723425
+mu_y = 42.6492169553
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.41534242064
 sigma_y = 3.41534242064
-mu_x = 96.1358501609
-mu_y = -17.5976651736
+mu_x = 136.988079545
+mu_y = 40.3878727209
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.4174153746
 sigma_y = 3.4174153746
-mu_x = 86.6734393038
-mu_y = -20.2856976157
+mu_x = 137.17381262
+mu_y = 29.5000500913
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.41920924451
 sigma_y = 3.41920924451
-mu_x = 82.0064083751
-mu_y = -18.1632534112
+mu_x = 127.976944728
+mu_y = 33.6439480074
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42066380616
 sigma_y = 3.42066380616
-mu_x = 73.1019352507
-mu_y = -25.4862666022
+mu_x = 134.581192412
+mu_y = 32.3727276589
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42177496038
 sigma_y = 3.42177496038
-mu_x = 67.2064943618
-mu_y = -12.0688593026
+mu_x = 118.695617468
+mu_y = 27.45971582
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42257797301
 sigma_y = 3.42257797301
-mu_x = 53.2275818752
-mu_y = -17.4065539206
+mu_x = 120.189092367
+mu_y = 24.578277097
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42312795098
 sigma_y = 3.42312795098
-mu_x = 61.8742657227
-mu_y = -11.8174069802
+mu_x = 107.658789208
+mu_y = 26.5785182303
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42348434893
 sigma_y = 3.42348434893
-mu_x = 48.4408578523
-mu_y = -23.4601528373
+mu_x = 106.711118588
+mu_y = 24.835351833
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42370152383
 sigma_y = 3.42370152383
-mu_x = 39.3288923338
-mu_y = -6.54931483053
+mu_x = 98.4782892648
+mu_y = 26.5293852093
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42382444432
 sigma_y = 3.42382444432
-mu_x = 36.6608767193
-mu_y = 1.15240623336
+mu_x = 92.8427555681
+mu_y = 21.5486284969
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42388776587
 sigma_y = 3.42388776587
-mu_x = 36.1149119106
-mu_y = -16.8462082187
+mu_x = 84.6433609255
+mu_y = 21.7853340652
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.423916689
 sigma_y = 3.423916689
-mu_x = 24.2383757254
-mu_y = -9.191107152
+mu_x = 80.3045558994
+mu_y = 19.8923959927
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42392854262
 sigma_y = 3.42392854262
-mu_x = 20.4066953828
-mu_y = 4.71649067367
+mu_x = 70.8036390247
+mu_y = 22.900061316
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42393450159
 sigma_y = 3.42393450159
-mu_x = 20.1642439534
-mu_y = -2.09306032428
+mu_x = 89.119174403
+mu_y = 15.8781462154
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42394115911
 sigma_y = 3.42394115911
-mu_x = 8.98232975281
-mu_y = 5.38113585349
+mu_x = 64.1283504062
+mu_y = 19.7745623218
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42395185067
 sigma_y = 3.42395185067
-mu_x = 9.17160635958
-mu_y = -10.2352198888
+mu_x = 55.6331614421
+mu_y = 13.6900867088
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42396771346
 sigma_y = 3.42396771346
-mu_x = 9.69243889811
-mu_y = -0.297784809731
+mu_x = 55.7467500616
+mu_y = 10.6163784149
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42398850225
 sigma_y = 3.42398850225
-mu_x = -5.33586433368
-mu_y = 2.72715394928
+mu_x = 35.4363620211
+mu_y = 10.4675500525
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42401319579
 sigma_y = 3.42401319579
-mu_x = -11.5411730667
-mu_y = -1.91988920409
+mu_x = 38.2363551589
+mu_y = 3.23042429176
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42404042941
 sigma_y = 3.42404042941
-mu_x = -18.5399472515
-mu_y = 10.4658953265
+mu_x = 37.3725481142
+mu_y = -5.16771449621
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42406878753
 sigma_y = 3.42406878753
-mu_x = -27.0439793879
-mu_y = 10.6500125367
+mu_x = 25.5880263192
+mu_y = 9.12921238416
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42409698642
 sigma_y = 3.42409698642
-mu_x = -29.6558013708
-mu_y = 16.6014165117
+mu_x = 16.2768423885
+mu_y = 7.59990295111
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42412397381
 sigma_y = 3.42412397381
-mu_x = -26.763568915
-mu_y = 27.1549069974
+mu_x = 17.8972293305
+mu_y = 16.0176419897
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42414896829
 sigma_y = 3.42414896829
-mu_x = -33.0057581418
-mu_y = 21.7690509984
+mu_x = 5.58290486165
+mu_y = 2.90750895631
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42417145756
 sigma_y = 3.42417145756
-mu_x = -32.6008338095
-mu_y = 31.948267176
+mu_x = 6.92652336422
+mu_y = -8.86629357201
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42419117114
 sigma_y = 3.42419117114
-mu_x = -36.8271039239
-mu_y = 42.660012126
+mu_x = 10.733490474
+mu_y = 12.207153392
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42420803921
 sigma_y = 3.42420803921
-mu_x = -41.026740243
-mu_y = 48.9229728246
+mu_x = -3.2750375209
+mu_y = 5.26513237058
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42422214664
 sigma_y = 3.42422214664
-mu_x = -41.0431425852
-mu_y = 38.7220554276
+mu_x = -0.167173417579
+mu_y = 3.62334014301
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42423368789
 sigma_y = 3.42423368789
-mu_x = -28.2122646471
-mu_y = 52.460392863
+mu_x = -19.6532132709
+mu_y = -3.45195264363
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42424292666
 sigma_y = 3.42424292666
-mu_x = -40.9849040269
-mu_y = 45.3793940352
+mu_x = -14.4860526203
+mu_y = -7.32026214582
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42425016217
 sigma_y = 3.42425016217
-mu_x = -23.8420580843
-mu_y = 58.9728822233
+mu_x = -19.1929060343
+mu_y = -9.75608534503
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42425570267
 sigma_y = 3.42425570267
-mu_x = -21.2810296662
-mu_y = 59.7087183601
+mu_x = -27.7437541048
+mu_y = -16.5404284131
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42425984609
 sigma_y = 3.42425984609
-mu_x = -17.2058949915
-mu_y = 71.7192332484
+mu_x = -28.0691665567
+mu_y = -11.2217150407
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426286695
 sigma_y = 3.42426286695
-mu_x = -13.9871754277
-mu_y = 64.5731592247
+mu_x = -35.326874165
+mu_y = -21.8694274038
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.4242650086
 sigma_y = 3.4242650086
-mu_x = -6.67770185665
-mu_y = 66.8473122356
+mu_x = -37.5185122654
+mu_y = -28.4074835104
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426647967
 sigma_y = 3.42426647967
-mu_x = -2.36574346031
-mu_y = 60.8894381631
+mu_x = -41.4201429439
+mu_y = -33.510276779
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426745366
 sigma_y = 3.42426745366
-mu_x = 19.5162685288
-mu_y = 64.9863561651
+mu_x = -25.0521011046
+mu_y = -39.5648501757
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426807071
 sigma_y = 3.42426807071
-mu_x = 15.2149978118
-mu_y = 68.8856115484
+mu_x = -37.5364426912
+mu_y = -58.9843647967
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426844081
 sigma_y = 3.42426844081
-mu_x = 11.2146623426
-mu_y = 63.387223331
+mu_x = -21.3215778228
+mu_y = -61.6953843233
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426864768
 sigma_y = 3.42426864768
-mu_x = 18.1237834221
-mu_y = 62.7547309187
+mu_x = -28.7508826871
+mu_y = -55.5454230531
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426875301
 sigma_y = 3.42426875301
-mu_x = 24.7500081316
-mu_y = 63.2003952303
+mu_x = -24.7125307362
+mu_y = -66.8393061161
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426880055
 sigma_y = 3.42426880055
-mu_x = 32.1833150123
-mu_y = 50.4868375833
+mu_x = -22.8711750631
+mu_y = -67.3764169687
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426881994
 sigma_y = 3.42426881994
-mu_x = 27.375465526
-mu_y = 52.6451890504
+mu_x = -10.4162604836
+mu_y = -69.6162020541
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426883003
 sigma_y = 3.42426883003
-mu_x = 47.8621045689
-mu_y = 46.8987849319
+mu_x = -5.62541000061
+mu_y = -73.1456001245
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.4242688418
 sigma_y = 3.4242688418
-mu_x = 45.098585249
-mu_y = 45.9580590092
+mu_x = 7.39515813951
+mu_y = -67.4587725029
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426886065
 sigma_y = 3.42426886065
-mu_x = 48.1242663848
-mu_y = 34.1758154857
+mu_x = 7.55619752942
+mu_y = -68.9825115263
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426888827
 sigma_y = 3.42426888827
-mu_x = 50.9216895277
-mu_y = 33.6777619223
+mu_x = 15.1587566749
+mu_y = -66.5788432889
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426892408
 sigma_y = 3.42426892408
-mu_x = 67.6162359822
-mu_y = 35.665928501
+mu_x = 13.1607477508
+mu_y = -66.0606558135
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426896626
 sigma_y = 3.42426896626
-mu_x = 63.0973261029
-mu_y = 37.0223932724
+mu_x = 22.4591969377
+mu_y = -60.2611109957
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426901244
 sigma_y = 3.42426901244
-mu_x = 77.9251362682
-mu_y = 32.8638204958
+mu_x = 29.8177182551
+mu_y = -54.31064349
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426906025
 sigma_y = 3.42426906025
-mu_x = 79.1987195682
-mu_y = 33.7720740844
+mu_x = 30.0161191026
+mu_y = -56.1953831052
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426910757
 sigma_y = 3.42426910757
-mu_x = 84.2394621348
-mu_y = 21.9228940911
+mu_x = 39.426502178
+mu_y = -50.2094385011
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426915268
 sigma_y = 3.42426915268
-mu_x = 91.8062576089
-mu_y = 31.9095988325
+mu_x = 41.3022693085
+mu_y = -49.1378657982
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426919433
 sigma_y = 3.42426919433
-mu_x = 86.3848861813
-mu_y = 28.1883280138
+mu_x = 51.30502243
+mu_y = -37.9621824658
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426923171
 sigma_y = 3.42426923171
-mu_x = 94.7842216015
-mu_y = 21.3865402663
+mu_x = 51.2066378383
+mu_y = -36.022431784
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426926441
 sigma_y = 3.42426926441
-mu_x = 103.177274211
-mu_y = 24.3345813222
+mu_x = 56.7206581142
+mu_y = -32.9099723763
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426929235
 sigma_y = 3.42426929235
-mu_x = 115.952840777
-mu_y = 30.6391996922
+mu_x = 69.0848946566
+mu_y = -45.2739238769
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.4242693157
 sigma_y = 3.4242693157
-mu_x = 115.358382455
-mu_y = 23.2036030088
+mu_x = 74.2522555364
+mu_y = -34.303740543
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426933478
 sigma_y = 3.42426933478
-mu_x = 116.664994782
-mu_y = 28.3513734211
+mu_x = 79.3319321076
+mu_y = -30.796795392
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426935005
 sigma_y = 3.42426935005
-mu_x = 126.490354701
-mu_y = 18.8135522515
+mu_x = 78.1717750516
+mu_y = -30.0257907014
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.424269362
 sigma_y = 3.424269362
-mu_x = 133.472144584
-mu_y = 26.1208460135
+mu_x = 92.0119606749
+mu_y = -31.7542546399
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426937116
 sigma_y = 3.42426937116
-mu_x = 142.945534111
-mu_y = 20.5439406697
+mu_x = 91.0597841558
+mu_y = -27.6133033588
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.424269378
 sigma_y = 3.424269378
-mu_x = 142.599017366
-mu_y = 22.74910728
+mu_x = 90.701821063
+mu_y = -29.2983448229
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426938299
 sigma_y = 3.42426938299
-mu_x = 153.086188604
-mu_y = 13.4124654577
+mu_x = 109.789495008
+mu_y = -24.6552483037
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426938653
 sigma_y = 3.42426938653
-mu_x = 154.083604221
-mu_y = 4.39844952363
+mu_x = 107.549431303
+mu_y = -20.9023909299
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 3.42426938897
 sigma_y = 3.42426938897
-mu_x = 161.421648502
-mu_y = 3.18714846137
+mu_x = 112.829103892
+mu_y = -19.0696809189
 rho = 0.0
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
