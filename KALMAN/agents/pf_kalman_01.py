@@ -397,10 +397,10 @@ class GnuPlot():
 		outfile = open(self.FILENAME, 'w')
 		minimum = -self.WORLDSIZE / 2
 		maximum = self.WORLDSIZE / 2
-		print >>outfile, self.gnuplot_header(minimum, maximum)
-		print >>outfile, self.draw_obstacles(self.bzrc.get_obstacles())
+		#print >>outfile, self.gnuplot_header(minimum, maximum)
+		#print >>outfile, self.draw_obstacles(self.bzrc.get_obstacles())
 		field_function = self.generate_field_function(150)
-		print >>outfile, self.plot_field(field_function)
+		#print >>outfile, self.plot_field(field_function)
 		outfile.close()
 		
 	def generate_field_function(self, scale):
