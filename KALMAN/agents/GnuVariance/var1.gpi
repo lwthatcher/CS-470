@@ -10,39 +10,4 @@ set palette model RGB functions 1-gray, 1-gray, 1-gray
 
 set isosamples 100
 
-sigma_x = 1.54513458771
-sigma_y = 74.8690362162
-mu_x = -90.7335909671
-mu_y = -11.1268187572
-rho = 0.378641420063
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
-pause 0.1
-sigma_x = 1.54651304977
-sigma_y = 75.6661974651
-mu_x = -86.5378142778
-mu_y = -9.23306262528
-rho = 0.371989844174
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
-pause 0.1
-sigma_x = 1.54735791647
-sigma_y = 76.381648228
-mu_x = -80.4492345097
-mu_y = -7.47820498135
-rho = 0.371936197815
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
-pause 0.1
-sigma_x = 1.54892662919
-sigma_y = 76.8186533831
-mu_x = -72.6978167732
-mu_y = -8.80917443626
-rho = 0.374066631353
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
-pause 0.1
-sigma_x = 1.55041005038
-sigma_y = 77.0143002653
-mu_x = -66.3689892432
-mu_y = -8.89348672052
-rho = 0.375815581081
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
-pause 0.1
 

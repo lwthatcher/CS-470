@@ -31,10 +31,9 @@ class Agent(object):
 		self.ALPHA = 0.01
 		self.goalradius = 30
 		
-		self.num_ticks = 1
-		#self.MAXTICKS = 5000
+		self.num_ticks = 0
 		self.RESET = 5000
-		self.MAXTICKS = 100
+		self.PRINTICKS = 100
 		self.UPTICKS = 20
 
 		self.rho = 0.3
@@ -61,6 +60,7 @@ class Agent(object):
 		self.make_map = GnuPlot(self, self.SIGMA_T, self.mu) 
 		
 		self.file_index = 0
+		
 
 	def tick(self, time_diff):
 		"""Some time has passed; decide what to do next."""
@@ -75,22 +75,21 @@ class Agent(object):
 		self.obstacles = self.bzrc.get_obstacles()
 		self.commands = []		
 		
+		if self.num_ticks % self.PRINTICKS == 0:
+			print self.file_index
+			self.make_map.update_file_index(self.file_index)
+			self.file_index = self.file_index + 1	
+			self.make_map.generateGnuMaps()
+		
 		for tank in self.mytanks:
 			self.observed_position, self.predicted_position = self.kalman(tank)
 		
 		if self.num_ticks % self.UPTICKS == 0:
 			self.make_map.update_observed_position(self.observed_position)
 			self.make_map.update_predicted_position(self.predicted_position)
-			#self.make_map.update_mu(self.mu_x, self.mu_y)
 			self.make_map.update_mu(self.mu[0,0], self.mu[3,0])
 			self.make_map.update_sigma(self.SIGMA_T)
-			self.make_map.add_animation()
-		
-		if self.num_ticks % self.MAXTICKS == 0:	
-			#print "printing map", self.file_index	
-			self.make_map.update_file_index(self.file_index)
-			self.file_index = self.file_index + 1	
-			self.make_map.generateGnuMaps()
+			#self.make_map.add_animation()
 			
 		if self.num_ticks % self.RESET == 0:
 			self.reset()	
@@ -281,8 +280,13 @@ class GnuPlot():
 		self.agent = agent
 		self.bzrc = agent.bzrc
 		
+		self.MU_FILE = 'mu.dat'
+		self.PRED_FILE = 'prediction.dat'
+		self.OBS_FILE = 'obs.dat'
+		
 		self.VAR_FILE = 'var.gpi'
 		self.POINTS_FILE = 'points.gpi'
+		self.SIGMA_FILE = 'sigma.txt'
 		self.WORLDSIZE = 800
 
 		self.update_sigma(SIGMA_T)		
@@ -302,6 +306,7 @@ class GnuPlot():
 	def update_file_index(self, index):
 		self.VAR_FILE = 'GnuVariance/var{}.gpi'.format(index)
 		self.POINTS_FILE = 'GnuPoints/points{}.gpi'.format(index)
+		self.SIGMA_FILE = 'GnuSigma/sigma{}.txt'.format(index)
 	
 	def update_observed_position(self, observation):
 		self.observed_x = observation[0,0]
@@ -327,14 +332,14 @@ class GnuPlot():
 		return sigma_x
 		
 	def get_sigma_y(self):
-		var_y = self.SIGMA_T[2,2]
+		var_y = self.SIGMA_T[3,3]
 		sigma_y = math.sqrt(var_y)
 		return sigma_y
 		
 	def get_rho(self):
 		sigma_x = self.get_sigma_x()
 		sigma_y = self.get_sigma_y()
-		sigma_xy = self.SIGMA_T[2,0]
+		sigma_xy = self.SIGMA_T[3,0]
 		rho = sigma_xy / (sigma_x * sigma_y)
 		return rho
 		
@@ -348,19 +353,15 @@ class GnuPlot():
 	def generateGnuMaps(self):
 		self.generateVarianceMap()
 		self.generatePointsMap()
-		"""
-		outfile = open(self.FILENAME, 'w')
-		minimum = -self.WORLDSIZE / 2
-		maximum = self.WORLDSIZE / 2
-		print >>outfile, self.gnuplot_header(minimum, maximum)
-		print >>outfile, 'set palette model RGB functions 1-gray, 1-gray, 1-gray\n'
-		print >>outfile, 'set isosamples 100\n'
-		print >>outfile, self.output
-		self.output = ''
+		self.generateVarianceVals()
+		self.appendPointsData()
 
+	def generateVarianceVals(self):
+		outfile = open(self.SIGMA_FILE, 'w')
+		print >>outfile, 'var_x = {}\n'.format(self.SIGMA_T[0,0])
+		print >>outfile, 'var_y = {}'.format(self.SIGMA_T[3,3])
 		outfile.close()
-		"""
-		
+	
 	def generatePointsMap(self):
 		outfile = open(self.POINTS_FILE, 'w')
 		minimum = -self.WORLDSIZE / 2
@@ -382,9 +383,27 @@ class GnuPlot():
 
 		outfile.close()
 	
+	def appendPointsData(self):
+		self.update_mu_file()
+		self.update_prediction_file()
+		self.update_observed_file()
+
+	def update_mu_file(self):
+		mu_outfile = open(self.MU_FILE, 'a')
+		print >>mu_outfile, '{}\t{}'.format(self.mu_x, self.mu_y)
+		mu_outfile.close()
+		
+	def update_prediction_file(self):
+		pred_output = open(self.PRED_FILE, 'a')
+		print >>pred_output, '{}\t{}'.format(self.prediction_x, self.prediction_y)
+		pred_output.close()
+		
+	def update_observed_file(self):
+		obs_outfile = open(self.OBS_FILE, 'a')
+		print >>obs_outfile, '{}\t{}'.format(self.observed_x, self.observed_y)
+		obs_outfile.close()
+	
 	def gnuplot_points_header(self, minimum, maximum):
-		#print "minimum:", minimum
-		#print "maximum:", maximum
 		s = ''
 		s += 'set xrange [%s: %s]\n' % (minimum, maximum)
 		s += 'set yrange [%s: %s]\n' % (minimum, maximum)
@@ -412,12 +431,14 @@ class GnuPlot():
 		s += "set title 'Kalman Filter (Variance)'\n"
 		return s
 	
+	
 	def gnuplot_points(self):
 		s = ''
 		s += 'plot "<echo \'{} {}\'" with points ls 1,'.format(self.observed_x, self.observed_y)
 		s += ' "<echo \'{} {}\'" with points ls 2,'.format(self.mu_x, self.mu_y)
 		s += ' "<echo \'{} {}\'" with points ls 3'.format(self.prediction_x, self.prediction_y)
 		return s
+
 	
 	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):
 		s = ''
@@ -447,6 +468,7 @@ def main():
 	prev_time = time.time()
 	cur_time = time.time()
 	# Run the agent
+	
 	try:
 		while True:
 			cur_time = time.time()
