@@ -33,7 +33,7 @@ class Agent(object):
 		
 		self.num_ticks = 0
 		self.RESET = 5000
-		self.PRINTICKS = 100
+		self.PRINTICKS = 50
 		self.UPTICKS = 20
 
 		self.rho = 0.3
