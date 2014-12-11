@@ -12,36 +12,36 @@ set isosamples 100
 
 sigma_x = 1.55193701824
 sigma_y = 77.0964226915
-mu_x = -78.9192643582
-mu_y = 0.56187006598
+mu_x = -30.7575938684
+mu_y = -2.21272921289
 rho = 0.376839575039
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 1.55194138559
 sigma_y = 77.0975517703
-mu_x = -72.3254028718
-mu_y = 0.914730225292
+mu_x = -24.8920732541
+mu_y = -2.25750115391
 rho = 0.376845421306
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 1.55194529719
 sigma_y = 77.0980417028
-mu_x = -66.4814107904
-mu_y = 1.43005057814
+mu_x = -20.7421291909
+mu_y = -3.75901218815
 rho = 0.376849933183
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 1.55194766819
 sigma_y = 77.0981938561
-mu_x = -60.675471727
-mu_y = 0.00234170012048
+mu_x = -14.8181120715
+mu_y = -1.59931575859
 rho = 0.376852010067
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1
 sigma_x = 1.55194872251
 sigma_y = 77.0982228421
-mu_x = -54.7195629932
-mu_y = -0.955406672448
+mu_x = -6.56653935069
+mu_y = -0.287900901287
 rho = 0.376852563155
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) ) 		* exp(-1.0/(2.0 * (1 - rho**2)) * ((x - mu_x)**2 / sigma_x**2 + (y - mu_y)**2 / sigma_y**2 		- 2.0*rho*(x-mu_x)*(y-mu_y)/(sigma_x*sigma_y) ) ) with pm3d
 pause 0.1

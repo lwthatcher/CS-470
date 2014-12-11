@@ -4,4 +4,4 @@ set view map
 set size square
 set title 'Kalman Filter (Positions)'
 
-plot "<echo '-54.7195629932 -0.955406672448'" with points ls 1, "<echo '20.5221264341 -20.2210788598'" with points ls 2, "<echo '-57.3647846563 0.274740816702'" with points ls 3
+plot " '-6.07898641043 0.673805880349'" with points ls 1, "<echo '-6.56653935069 -0.287900901287'" with points ls 2, "<echo '96.0283051971 26.6500072156'" with points ls 3

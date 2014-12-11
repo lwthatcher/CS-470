@@ -329,7 +329,18 @@ class GnuPlot():
 		# Make sure the figure is square since the world is square:
 		s += 'set size square\n'
 		# Add a pretty title (optional):
+<<<<<<< HEAD
 		s += "set title 'Kalman Filter'\n"
+=======
+		s += "set title 'Kalman Filter (Variance)'\n"
+		return s
+	
+	def gnuplot_points(self):
+		s = ''
+		s += 'plot "<echo \'{} {}\'" with points ls 1,'.format(self.observed_x, self.observed_y)
+		s += ' "<echo \'{} {}\'" with points ls 2,'.format(self.mu_x, self.mu_y)
+		s += ' "<echo \'{} {}\'" with points ls 3'.format(self.prediction_x, self.prediction_y)
+>>>>>>> 6e29a3b79444a21ae58bf0c20a0ec947bf76d67c
 		return s
 	
 	def gnuplot_variables(self, sigma_x, sigma_y, mu_x, mu_y, rho):
